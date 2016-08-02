@@ -239,9 +239,9 @@ namespace NetworkDynamics
                 for (int j = 0; j < parameters.N; j++) // only go through the upper diagonal entries.
                     if (i != j && adjMat[i][j] != 0)
                     {
-                        if (adjMat[i][j] < 0) adjMat[i][j] = -0.2;
-                        else adjMat[i][j] = rdn.NextDouble();
-                        //adjMat[i][j] = 1 - 2d * rdn.NextDouble();
+                        //if (adjMat[i][j] < 0) adjMat[i][j] = -0.2;
+                        //else adjMat[i][j] = rdn.NextDouble();
+                        adjMat[i][j] = 1 - 2d * rdn.NextDouble();
                     }
         }
 
