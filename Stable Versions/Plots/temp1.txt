@@ -1,0 +1,15 @@
+R0.31_VERT500_CONN85_TIME410
+error
+276	1	Green
+277	3	Green
+278	4	Green
+279	6	Green
+281	3	Green
+282	5	Green
+405	2	Green
+406	3	Green
+407	4	Green
+408	5	Green
+409	5	Red
+410	7	Purple
+411	11	Red

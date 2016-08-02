@@ -1,0 +1,213 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace CaWavePropagation
+{
+    public partial class Form1 : Form
+    {
+        private List<double[]> cruMatrix = new List<double[]>();        //{x, y, state, CaConcent} @ time t
+        private List<double[]> cruMatrix_tm1 = new List<double[]>();    //{x, y, state, CaConcent} CRUs @ t-1
+        private List<double[]> distMatrix = new List<double[]>();       //1000x1000 matrix storing the dist between points
+        
+        private Random rdn = new Random();
+
+        private double PARAM_L, PARAM_R, L_SQUARED;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+            
+
+        private void button1_Click(object sender, EventArgs e)
+            //button1_Click: generates the random placement of CRU and places them in the plotting area
+        {
+
+            double x, y, state, xAx, yAx;
+            double cZero = Convert.ToDouble(numCzero.Value);
+
+            xAx = Convert.ToDouble(numX.Value);
+            yAx = Convert.ToDouble(numY.Value);
+
+            chartSetup(xAx, yAx);
+
+            cruMatrix.Clear();
+            if (radioOn.Checked) state = 1; else state = 0;
+            for (int i = 0; i < numCrus.Value; i++)
+            {
+                x = xAx * rdn.NextDouble(); y = yAx * rdn.NextDouble();
+                
+                cruMatrix.Add(new double[4] {x,y,state, cZero}); //creates an array within the list
+                //cruMatrix_tm1.Add(new double[3] { x, y, state });
+
+                chart1.Series["S1"].Points.AddXY(x, y);
+
+                if (state == 1) chart1.Series["S1"].Points[i].Color = Color.Red;
+                else chart1.Series["S1"].Points[i].Color = Color.Black;
+
+                chart1.Series["S1"].Points[i].MarkerBorderWidth = 0;
+                chart1.Series["S1"].Points[i].MarkerSize = 8;
+                
+            }
+            //List<double[]> cruMatrix_tm1 = new List<double[]>(cruMatrix);
+            cruMatrix_tm1 = cruMatrix.ToList();
+            distMatrix.Clear();
+            initParameters();
+            getDistMat();
+            
+        }
+
+        private void getDistMat()
+            // computes the distance matrix of the CRU distribution
+        {
+
+            int ijMax = (int)numCrus.Value;
+            
+            for (int i = 0; i < ijMax; i++)
+            {
+                double[] dist = new double[ijMax];
+                distMatrix.Add(new double[ijMax]);
+                
+                for (int j = 0; j < ijMax; j++)
+                {
+                    dist[j] = Math.Pow((cruMatrix[i][0] - cruMatrix[j][0]), 2) + 
+                              Math.Pow((cruMatrix[i][1] - cruMatrix[j][1]), 2);
+                    dist[j] = PARAM_R / Math.Exp(dist[j] / L_SQUARED);
+                }
+
+                distMatrix[i] = dist;
+
+                
+            }
+            
+        }
+
+        private void chartSetup(double xAx, double yAx)
+            // chartSetup: initializez the chart parameters
+            // @double - x axis size
+            // @double - y axis size
+        {
+            chart1.Series["S1"].Points.Clear();
+            chart1.Series["S2"].Points.Clear();
+
+            chart1.ChartAreas[0].AxisX.Maximum = xAx;
+            chart1.ChartAreas[0].AxisY.Maximum = yAx;
+
+            chart1.Series["S2"].Points.AddXY(0, 0); chart1.Series["S2"].Points.AddXY(0, yAx);
+            chart1.Series["S2"].Points.AddXY(xAx, 0); chart1.Series["S2"].Points.AddXY(xAx, yAx);
+        }
+
+        private void systemUpdate()
+            // systemUpdate - updates the system plot (data point colors)
+            
+        {
+            int maxI = (int)numCrus.Value;
+            double x, y;
+            for (int i = 0; i < maxI; i++)
+            {
+                
+                x = cruMatrix[i][0];    //chart1.Series["S1"].Points[i].XValue;
+                y = cruMatrix[i][1];    //chart1.Series["S1"].Points[i].YValues[0];
+                if (cruMatrix[i][2] == 1)
+                    chart1.Series["S1"].Points[i].Color = Color.Red;
+                else
+                    chart1.Series["S1"].Points[i].Color = Color.Black;
+
+            }
+            chart1.Update();
+        }
+
+        //private double IthCaConcentDueToJth(int i, int j)
+        //    // IthCaConcentDueToJth - this function computes the Ca concentration spike at site i due to a spark at site j
+        //    // @return double - Ca Concentration at i
+        //{
+            
+        //    //double dist = Math.Pow((cruMatrix_tm1[i][0] - cruMatrix_tm1[j][0]),2) + Math.Pow((cruMatrix_tm1[i][1] - cruMatrix_tm1[j][1]),2);
+        //    //return PARAM_R * Math.Exp(-distMatrix[i][j] / L_SQUARED);
+        //}
+
+        private void updateCaConcentration()
+            // updateCaConcentration - updates the concentration of Ca for the system
+        {
+            //double spike = 0;
+            double size = (double)numCrus.Value;
+            double cZero = (double)numCzero.Value;
+
+            for (int i = 0; i < size; i++)
+            {
+                double spike = 0;
+                for (int j = 0; j < size; j++)
+                {
+                    if (i == j) continue;
+                    spike += distMatrix[i][j] * cruMatrix_tm1[i][2];
+                }
+                cruMatrix[i][3] = cZero + spike;
+                //spike = 0;
+            }
+        }
+
+        private void updateSystemState()
+            // updateSystemState - updates the state for every unit in the system
+        {
+            double g = (double)numG.Value;
+            double gamma = (double)numGama.Value;
+            double beta = (double)numBeta.Value;
+            int numCru = (int)numCrus.Value;
+
+            for (int i = 0; i < numCru; i++)
+            {
+                if (cruMatrix_tm1[i][2] == 0)
+                {
+                    if (rdn.NextDouble() < g * Math.Pow(cruMatrix[i][3], gamma)) //runs the probability of transitioning from 0 -> 1
+                    {
+                        cruMatrix[i][2] = 1;
+                    }
+                }
+                if (cruMatrix_tm1[i][2] == 1)
+                {
+                    if (rdn.NextDouble() < beta)    //probability of transitioning from 1 -> 0
+                    {
+                        cruMatrix[i][2] = 0;
+                    }
+                }
+            }
+        }
+
+        private void initParameters()
+            //initParameters - computes derived or retieved parameters outside of loops to save execution time
+        {
+            PARAM_L = (double)(numS.Value * numX.Value) / (2 * Math.Sqrt((double)numCrus.Value));
+            PARAM_R = (double)numR.Value;
+            L_SQUARED = Math.Pow(PARAM_L, 2.0);
+        }
+
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            int runUntil = (int)numDtSteps.Value, run = 0;
+            
+
+            while (true)
+            {
+                updateCaConcentration();
+                updateSystemState();
+                systemUpdate();
+                cruMatrix_tm1 = cruMatrix.ToList(); 
+                tbTime.Text = (run * (double)numDtStepSize.Value).ToString();
+                tbTime.Update();
+
+                run++;
+                if (run > runUntil) break;
+            }
+            
+        }
+    }
+
+
+}

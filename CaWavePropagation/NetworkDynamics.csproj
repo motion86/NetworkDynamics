@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B5131F05-7C59-421F-A554-41BDDB669C79}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NetworkDynamics</RootNamespace>
+    <AssemblyName>NetworkDynamics</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\Myers\Desktop\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>06405C9CBD2D45A1E789D71C646D4296B603CDB1</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>NetworkDynamics_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ALGLIB\alglibinternal.cs" />
+    <Compile Include="ALGLIB\alglibmisc.cs" />
+    <Compile Include="ALGLIB\alglib_info.cs" />
+    <Compile Include="ALGLIB\ap.cs" />
+    <Compile Include="ALGLIB\dataanalysis.cs" />
+    <Compile Include="ALGLIB\diffequations.cs" />
+    <Compile Include="ALGLIB\fasttransforms.cs" />
+    <Compile Include="ALGLIB\integration.cs" />
+    <Compile Include="ALGLIB\interpolation.cs" />
+    <Compile Include="ALGLIB\linalg.cs" />
+    <Compile Include="ALGLIB\optimization.cs" />
+    <Compile Include="ALGLIB\solvers.cs" />
+    <Compile Include="ALGLIB\specialfunctions.cs" />
+    <Compile Include="ALGLIB\statistics.cs" />
+    <Compile Include="Forms\ChartLabels.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChartLabels.Designer.cs">
+      <DependentUpon>ChartLabels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GraphixPlotVertical.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GraphixPlotVertical.Designer.cs">
+      <DependentUpon>GraphixPlotVertical.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SupportClasses\Experiment.cs" />
+    <Compile Include="Forms\GraphixPlots.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GraphixPlots.Designer.cs">
+      <DependentUpon>GraphixPlots.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PlotAnalytics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PlotAnalytics.Designer.cs">
+      <DependentUpon>PlotAnalytics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PlotResults.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PlotResults.Designer.cs">
+      <DependentUpon>PlotResults.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SupportClasses\ColorTools.cs" />
+    <Compile Include="SupportClasses\DataTools.cs" />
+    <Compile Include="SupportClasses\Edge.cs" />
+    <Compile Include="SupportClasses\FileIO.cs" />
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SupportClasses\LinearAlgebra.cs" />
+    <Compile Include="Forms\LoadFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LoadFile.Designer.cs">
+      <DependentUpon>LoadFile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MainFormEvents.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SupportClasses\Matrix.cs" />
+    <Compile Include="Forms\MatrixForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MatrixForm.Designer.cs">
+      <DependentUpon>MatrixForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SupportClasses\NetStats.cs" />
+    <Compile Include="SupportClasses\Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SupportClasses\ResearchNetwork.cs" />
+    <Compile Include="SupportClasses\RichTextBoxExtensions.cs" />
+    <Compile Include="Forms\TimeTracePlot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TimeTracePlot.Designer.cs">
+      <DependentUpon>TimeTracePlot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SupportClasses\Vertex.cs" />
+    <Compile Include="SupportClasses\VertexData.cs" />
+    <Compile Include="SupportClasses\VertexSystem.cs" />
+    <EmbeddedResource Include="Forms\ChartLabels.resx">
+      <DependentUpon>ChartLabels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GraphixPlots.resx">
+      <DependentUpon>GraphixPlots.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LoadFile.resx">
+      <DependentUpon>LoadFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MatrixForm.resx">
+      <DependentUpon>MatrixForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PlotAnalytics.resx">
+      <DependentUpon>PlotAnalytics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PlotResults.resx">
+      <DependentUpon>PlotResults.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GraphixPlotVertical.resx">
+      <DependentUpon>GraphixPlotVertical.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Forms\TimeTracePlot.resx">
+      <DependentUpon>TimeTracePlot.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="CaWavePropagation_TemporaryKey.pfx" />
+    <None Include="NetworkDynamics_TemporaryKey.pfx" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PlotScript.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\next_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\next_h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pause_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pause_h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play_h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\previous_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\previous_h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\temp.py" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
