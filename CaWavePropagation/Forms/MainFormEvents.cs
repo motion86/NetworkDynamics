@@ -220,7 +220,7 @@ namespace NetworkDynamics
                                                                                                     {"A", numAlpha},
                                                                                                     {"E", numEta},
                                                                                                     {"Ga", numGama},
-                                                                                                    {"dT", numBeta},
+                                                                                                    {"dT", numDt},
                                                                                                     };
 
             TimeTracePlot tpForm = new TimeTracePlot(tpSeries, netParams, netTypes[netType]); // N, s, r, gamma, beta, g, c_0 

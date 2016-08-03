@@ -221,14 +221,14 @@ namespace NetworkDynamics
         private bool runSim1(double[] pars)
         // Simulation routine for experiment 2.
         //pars: 0-g, 1-Gamma, 2-Beta, 3-R, 4-Background, 5-Threshold, 6-MaxItr.
-        // 0-Eta, 1-Gamma, 2-Beta, 3-Alpha, 4-Threshold, 5-MaxItr.
+        // 0-Eta, 1-Gamma, 2-dt, 3-Alpha, 4-Threshold, 5-MaxItr, 6-EtaNeg, 7-Beta.
         {
             bool symRunStop = true;
             int runs = 0, time = 0;
             
             double threshold = (double)(sysSize) * pars[4] / 100.0;
 
-            ResetState(0, pars[0]);
+            ResetState(0, pars[0], pars[6]);
 
             while (symRunStop)
             {
@@ -255,7 +255,7 @@ namespace NetworkDynamics
         private bool runSim2(double[] pars, double state)
         // Simulation routine for experiment 3 (PhaseTransitions I).
         //pars: 0-g, 1-Gamma, 2-Beta, 3-R, 4-Background, 5-Threshold, 6-MaxItr.
-        // 0-Eta, 1-Gamma, 2-Beta, 3-Alpha, 4-Threshold, 5-MaxItr.
+        // 0-Eta, 1-Gamma, 2-dt, 3-Alpha, 4-Threshold, 5-MaxItr, 6-EtaNeg, 7-Beta.
         {
             int numSamples = 150;
             int blockSize = 30;
@@ -267,9 +267,9 @@ namespace NetworkDynamics
 
             double threshold = pars[4] / 100.0;
 
-            if (state == 0)         ResetState(0, pars[0]);
-            else if (state == 1)    ResetState(1, pars[0]);
-            else                    ResetState(GetInitialCondition(state), pars[0]);
+            if (state == 0)         ResetState(0, pars[0], pars[6]);
+            else if (state == 1)    ResetState(1, pars[0], pars[6]);
+            else                    ResetState(GetInitialCondition(state), pars[0], pars[6]);
 
             while (symRunStop)
             {
@@ -304,15 +304,15 @@ namespace NetworkDynamics
         private bool runSim3(double[] pars, double initialCondition)
         //  Simulation routine for experiment 4 (PhaseTransitions II).
         //  pars: 0-g, 1-Gamma, 2-Beta, 3-R, 4-Background, 5-Threshold, 6-MaxItr.
-        // 0-Eta, 1-Gamma, 2-Beta, 3-Alpha, 4-Threshold, 5-MaxItr.
+        // 0-Eta, 1-Gamma, 2-dt, 3-Alpha, 4-Threshold, 5-MaxItr, 6-EtaNeg, 7-Beta.
         {
             bool symRunStop = true;
             int runs = 0;
             int sampleEvery = 5;
 
-            if (initialCondition == 0) ResetState(0, pars[0]);
-            else if (initialCondition == 1) ResetState(1, pars[0]);
-            else ResetState(GetInitialCondition(initialCondition), pars[0]);
+            if (initialCondition == 0) ResetState(0, pars[0], pars[6]);
+            else if (initialCondition == 1) ResetState(1, pars[0], pars[6]);
+            else ResetState(GetInitialCondition(initialCondition), pars[0], pars[6]);
 
             while (symRunStop)
             {
@@ -366,7 +366,7 @@ namespace NetworkDynamics
         private bool runSim5()
         //  Simulation routine for experiment 4 (PhaseTransitions II).
         //  pars: 0-g, 1-Gamma, 2-Beta, 3-R, 4-Background, 5-Threshold, 6-MaxItr.
-        // 0-Eta, 1-Gamma, 2-Beta, 3-Alpha, 4-Threshold, 5-MaxItr.
+        // 0-Eta, 1-Gamma, 2-dt, 3-Alpha, 4-Threshold, 5-MaxItr, 6-EtaNeg, 7-Beta.
         {
             bool symRunStop = true;
             int runs = 0;
@@ -374,9 +374,9 @@ namespace NetworkDynamics
 
             double warmUp = ExpPars.N / 2;
 
-            if (ExpPars.InitialCodition == 0) ResetState(0, ExpPars.Eta);
-            else if (ExpPars.InitialCodition == 1) ResetState(1, ExpPars.Eta);
-            else ResetState(GetInitialCondition(ExpPars.InitialCodition), ExpPars.Eta);
+            if (ExpPars.InitialCodition == 0) ResetState(0, ExpPars.Eta, ExpPars.EtaNeg);
+            else if (ExpPars.InitialCodition == 1) ResetState(1, ExpPars.Eta, ExpPars.EtaNeg);
+            else ResetState(GetInitialCondition(ExpPars.InitialCodition), ExpPars.Eta, ExpPars.EtaNeg);
 
             // This Vector will store the active sites density.
             Results.DensityVector = new List<double>(ExpPars.N);
@@ -499,7 +499,7 @@ namespace NetworkDynamics
     public class ExperimentParameters : SystemParameters
     {
         public double[] pars { get; private set; } //  pars: 0-g, 1-Gamma, 2-Beta, 3-R, 4-Background, 5-Threshold, 6-MaxItr
-                                                   // 0-Eta, 1-Gamma, 2-Beta, 3-Alpha, 4-Threshold, 5-MaxItr.
+                                                   // 0-Eta, 1-Gamma, 2-dt, 3-Alpha, 4-Threshold, 5-MaxItr, 6-EtaNeg, 7-Beta.
         private int varParameter;
         int numSteps;
         private double varMin, varStep;
@@ -509,7 +509,7 @@ namespace NetworkDynamics
         public ExperimentParameters(SystemParameters p, double initialCondition, double threshold, double maxItr, 
                              string varName, double varMin, double varStep) : base(p)
         {
-            pars = new double[] { p.Eta, p.Gamma, p.Beta, p.Alpha, threshold, maxItr };
+            pars = new double[] { p.Eta, p.Gamma, p.dt, p.Alpha, threshold, maxItr, p.EtaNeg, p.Beta };
 
             InitialCodition = initialCondition;
             StopCodition = threshold;
@@ -528,7 +528,7 @@ namespace NetworkDynamics
         }
         public int? GetParameterIndex(string name)
             // GetParameterIndex - returns the index of a system prameter given its name.
-            // varNames: Eta, Gamma, Beta, Alpha
+            // varNames: Eta, Gamma, dt, Alpha
         {
             switch (name)
             {
@@ -536,10 +536,14 @@ namespace NetworkDynamics
                     return 0;
                 case "Gamma":
                     return 1;
-                case "Beta":
+                case "dt":
                     return 2;
                 case "Alpha":
                     return 3;
+                case "Beta":
+                    return 7;
+                case "EtaNeg":
+                    return 6;
                 default:
                     return null;
             }
@@ -547,7 +551,7 @@ namespace NetworkDynamics
         public void SyncMemberVars()
             //Syncs the pars array with the member vars;
         {
-            Alpha = pars[3]; Gamma = pars[1]; Beta = pars[2]; Eta = pars[0];
+            Alpha = pars[3]; Gamma = pars[1]; dt = pars[2]; Eta = pars[0]; Beta = pars[7]; EtaNeg = pars[6]; 
         }
         public double IncrementVar()
             // IncrementVar - increments the variable paramenter.

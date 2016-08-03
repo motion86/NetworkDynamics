@@ -72,7 +72,7 @@
             this.label_gamma = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label_betta = new System.Windows.Forms.Label();
-            this.numBeta = new System.Windows.Forms.NumericUpDown();
+            this.numDt = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.numDtSteps = new System.Windows.Forms.NumericUpDown();
             this.btnRun = new System.Windows.Forms.Button();
@@ -193,6 +193,8 @@
             this.tabEigen = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.btnSaveToFile = new System.Windows.Forms.GroupBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.numEigVector = new System.Windows.Forms.NumericUpDown();
             this.btnEigenViz = new System.Windows.Forms.Button();
             this.btnSaveEigenCsv = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -200,6 +202,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tbLambda = new System.Windows.Forms.TextBox();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.rtbEigVector = new System.Windows.Forms.RichTextBox();
             this.rtbEigenVals = new System.Windows.Forms.RichTextBox();
             this.btnCalcEigen = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -218,9 +221,10 @@
             this.pbNext = new System.Windows.Forms.PictureBox();
             this.pbPause = new System.Windows.Forms.PictureBox();
             this.pbPlay = new System.Windows.Forms.PictureBox();
-            this.rtbEigVector = new System.Windows.Forms.RichTextBox();
-            this.numEigVector = new System.Windows.Forms.NumericUpDown();
-            this.label27 = new System.Windows.Forms.Label();
+            this.numEtaNeg = new System.Windows.Forms.NumericUpDown();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.numBeta = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numVertecies)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -234,7 +238,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numEta)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGama)).BeginInit();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numBeta)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDt)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDtSteps)).BeginInit();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numStopCond)).BeginInit();
@@ -279,6 +283,7 @@
             this.tabEigen.SuspendLayout();
             this.groupBox12.SuspendLayout();
             this.btnSaveToFile.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numEigVector)).BeginInit();
             this.groupBox13.SuspendLayout();
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSeed)).BeginInit();
@@ -287,7 +292,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPause)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numEigVector)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEtaNeg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numBeta)).BeginInit();
             this.SuspendLayout();
             // 
             // chart1
@@ -609,13 +615,17 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label34);
+            this.groupBox3.Controls.Add(this.numBeta);
+            this.groupBox3.Controls.Add(this.numEtaNeg);
+            this.groupBox3.Controls.Add(this.label33);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.numEta);
             this.groupBox3.Controls.Add(this.label_r);
             this.groupBox3.Controls.Add(this.numAlpha);
             this.groupBox3.Location = new System.Drawing.Point(380, 119);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(108, 70);
+            this.groupBox3.Size = new System.Drawing.Size(108, 125);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Free Parameters";
@@ -638,7 +648,7 @@
             0,
             0,
             262144});
-            this.numEta.Location = new System.Drawing.Point(33, 41);
+            this.numEta.Location = new System.Drawing.Point(33, 69);
             this.numEta.Maximum = new decimal(new int[] {
             2,
             0,
@@ -663,7 +673,7 @@
             // 
             this.label_r.AutoSize = true;
             this.label_r.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_r.Location = new System.Drawing.Point(11, 41);
+            this.label_r.Location = new System.Drawing.Point(11, 69);
             this.label_r.Name = "label_r";
             this.label_r.Size = new System.Drawing.Size(20, 17);
             this.label_r.TabIndex = 16;
@@ -722,7 +732,7 @@
             // 
             this.groupBox4.Controls.Add(this.label_s);
             this.groupBox4.Controls.Add(this.label_betta);
-            this.groupBox4.Controls.Add(this.numBeta);
+            this.groupBox4.Controls.Add(this.numDt);
             this.groupBox4.Controls.Add(this.label_gamma);
             this.groupBox4.Controls.Add(this.numK);
             this.groupBox4.Controls.Add(this.numGama);
@@ -737,36 +747,36 @@
             // 
             this.label_betta.AutoSize = true;
             this.label_betta.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_betta.Location = new System.Drawing.Point(15, 48);
+            this.label_betta.Location = new System.Drawing.Point(12, 48);
             this.label_betta.Name = "label_betta";
-            this.label_betta.Size = new System.Drawing.Size(16, 17);
+            this.label_betta.Size = new System.Drawing.Size(20, 17);
             this.label_betta.TabIndex = 23;
-            this.label_betta.Text = "β";
+            this.label_betta.Text = "dt";
             // 
-            // numBeta
+            // numDt
             // 
-            this.numBeta.DecimalPlaces = 3;
-            this.numBeta.Increment = new decimal(new int[] {
+            this.numDt.DecimalPlaces = 3;
+            this.numDt.Increment = new decimal(new int[] {
             5,
             0,
             0,
             196608});
-            this.numBeta.Location = new System.Drawing.Point(36, 48);
-            this.numBeta.Maximum = new decimal(new int[] {
+            this.numDt.Location = new System.Drawing.Point(36, 48);
+            this.numDt.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numBeta.Minimum = new decimal(new int[] {
+            this.numDt.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             196608});
-            this.numBeta.Name = "numBeta";
-            this.numBeta.Size = new System.Drawing.Size(60, 20);
-            this.numBeta.TabIndex = 22;
-            this.numBeta.Tag = "Beta";
-            this.numBeta.Value = new decimal(new int[] {
+            this.numDt.Name = "numDt";
+            this.numDt.Size = new System.Drawing.Size(60, 20);
+            this.numDt.TabIndex = 22;
+            this.numDt.Tag = "dt";
+            this.numDt.Value = new decimal(new int[] {
             5,
             0,
             0,
@@ -2334,6 +2344,28 @@
             this.btnSaveToFile.TabStop = false;
             this.btnSaveToFile.Text = "Leading Eigen Val:";
             // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(13, 51);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(41, 13);
+            this.label27.TabIndex = 31;
+            this.label27.Text = "Vector:";
+            // 
+            // numEigVector
+            // 
+            this.numEigVector.Location = new System.Drawing.Point(65, 49);
+            this.numEigVector.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numEigVector.Name = "numEigVector";
+            this.numEigVector.Size = new System.Drawing.Size(119, 20);
+            this.numEigVector.TabIndex = 30;
+            this.numEigVector.ValueChanged += new System.EventHandler(this.numEigVector_ValueChanged);
+            // 
             // btnEigenViz
             // 
             this.btnEigenViz.Location = new System.Drawing.Point(65, 222);
@@ -2400,6 +2432,14 @@
             this.groupBox13.TabIndex = 26;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Vector Components";
+            // 
+            // rtbEigVector
+            // 
+            this.rtbEigVector.Location = new System.Drawing.Point(141, 19);
+            this.rtbEigVector.Name = "rtbEigVector";
+            this.rtbEigVector.Size = new System.Drawing.Size(96, 299);
+            this.rtbEigVector.TabIndex = 26;
+            this.rtbEigVector.Text = "";
             // 
             // rtbEigenVals
             // 
@@ -2603,35 +2643,83 @@
             this.pbPlay.MouseLeave += new System.EventHandler(this.pbPlay_MouseLeave);
             this.pbPlay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbPlay_MouseUp);
             // 
-            // rtbEigVector
+            // numEtaNeg
             // 
-            this.rtbEigVector.Location = new System.Drawing.Point(141, 19);
-            this.rtbEigVector.Name = "rtbEigVector";
-            this.rtbEigVector.Size = new System.Drawing.Size(96, 299);
-            this.rtbEigVector.TabIndex = 26;
-            this.rtbEigVector.Text = "";
-            // 
-            // numEigVector
-            // 
-            this.numEigVector.Location = new System.Drawing.Point(65, 49);
-            this.numEigVector.Maximum = new decimal(new int[] {
-            1000000,
+            this.numEtaNeg.DecimalPlaces = 5;
+            this.numEtaNeg.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            262144});
+            this.numEtaNeg.Location = new System.Drawing.Point(33, 95);
+            this.numEtaNeg.Maximum = new decimal(new int[] {
+            2,
             0,
             0,
             0});
-            this.numEigVector.Name = "numEigVector";
-            this.numEigVector.Size = new System.Drawing.Size(119, 20);
-            this.numEigVector.TabIndex = 30;
-            this.numEigVector.ValueChanged += new System.EventHandler(this.numEigVector_ValueChanged);
+            this.numEtaNeg.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            458752});
+            this.numEtaNeg.Name = "numEtaNeg";
+            this.numEtaNeg.Size = new System.Drawing.Size(60, 20);
+            this.numEtaNeg.TabIndex = 20;
+            this.numEtaNeg.Tag = "Eta";
+            this.numEtaNeg.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            262144});
             // 
-            // label27
+            // label33
             // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(13, 51);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(41, 13);
-            this.label27.TabIndex = 31;
-            this.label27.Text = "Vector:";
+            this.label33.AutoSize = true;
+            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label33.Location = new System.Drawing.Point(7, 94);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(25, 17);
+            this.label33.TabIndex = 19;
+            this.label33.Text = "`η:";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label34.Location = new System.Drawing.Point(10, 41);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(20, 17);
+            this.label34.TabIndex = 25;
+            this.label34.Text = "β:";
+            // 
+            // numBeta
+            // 
+            this.numBeta.DecimalPlaces = 3;
+            this.numBeta.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            196608});
+            this.numBeta.Location = new System.Drawing.Point(33, 41);
+            this.numBeta.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numBeta.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.numBeta.Name = "numBeta";
+            this.numBeta.Size = new System.Drawing.Size(60, 20);
+            this.numBeta.TabIndex = 24;
+            this.numBeta.Tag = "Beta";
+            this.numBeta.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
             // 
             // MainForm
             // 
@@ -2674,7 +2762,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numGama)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numBeta)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDt)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDtSteps)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
@@ -2733,6 +2821,7 @@
             this.groupBox12.ResumeLayout(false);
             this.btnSaveToFile.ResumeLayout(false);
             this.btnSaveToFile.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numEigVector)).EndInit();
             this.groupBox13.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
@@ -2743,7 +2832,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPause)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numEigVector)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEtaNeg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numBeta)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2776,7 +2866,7 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown numDtStepSize;
         private System.Windows.Forms.Label label_betta;
-        private System.Windows.Forms.NumericUpDown numBeta;
+        private System.Windows.Forms.NumericUpDown numDt;
         private System.Windows.Forms.TextBox tbTime;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
         private System.Windows.Forms.CheckBox cbCoupled;
@@ -2926,6 +3016,10 @@
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.NumericUpDown numEigVector;
         private System.Windows.Forms.RichTextBox rtbEigVector;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.NumericUpDown numBeta;
+        private System.Windows.Forms.NumericUpDown numEtaNeg;
+        private System.Windows.Forms.Label label33;
     }
 }
 

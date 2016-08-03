@@ -83,7 +83,7 @@ namespace NetworkDynamics
 
 
             if (sender == rb_e) myControl = numEta; // myButton = "Eta";
-            else if (sender == rb_beta) myControl = numBeta; // myButton = "BETA";
+            else if (sender == rb_beta) myControl = numDt; // myButton = "BETA";
             else if (sender == rb_gamma) myControl = numGama; // myButton = "GAMMA";
             else if (sender == rb_net_con) myControl = numNet; // myButton = "NETCON";
             else if (sender == rb_num_cru) myControl = numVertecies; // myButton = "NUMCRU";
@@ -151,10 +151,12 @@ namespace NetworkDynamics
         public SystemParameters packSystemParameters()
         // packSystemParameters - returns a new SystemParameters object populated with current param values.
         {
-            return new SystemParameters((double)numAlpha.Value,
+            return new SystemParameters(        (double)numAlpha.Value,
                                                 (double)numEta.Value,
                                                 (double)numGama.Value,
                                                 (double)numBeta.Value,
+                                                (double)numEtaNeg.Value,
+                                                (double)numDt.Value,
                                                 (double)numNet.Value,
                                                 (int)numVertecies.Value,
                                                 (double)numK.Value,

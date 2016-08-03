@@ -8,10 +8,15 @@ namespace NetworkDynamics
 {
     public class VertexSystem
     {
-        public List<double[]> systemState { private set; get; }      // {x, y, state, CaConcent} @ time t
-        private List<double[]> systemState_tm1;                      // {x, y, state, CaConcent} CRUs @ t-1
+        public List<double[]> systemState { private set; get; }      // {x, y, state, CaConcent, BackRate} @ time t
+        private List<double[]> systemState_tm1;                      // {x, y, state, CaConcent, BackRate} CRUs @ t-1
+
         public List<double[]> adjMat { private set; get; }           // NxN matrix storing relationships between nodes.
+        public double[,] adjMatScaled { private set; get; }          // NxN matrix storing relationships between nodes with adjusted weights.
+
         public List<List<int>> adjList { private set; get; }         // contains the indecies of the non zero entries of the adjMatrix.
+        public List<List<int>> adjListInhibitory { private set; get; }         // contains the indecies of the non zero entries of the adjMatrix which are inhibitory.
+
 
         private bool ready;
 
@@ -107,8 +112,8 @@ namespace NetworkDynamics
             systemState_tm1 = new List<double[]>(sysSize);
             for (int i = 0; i < sysSize; i++)
             {
-                systemState.Add(_assembleStateVector(coords, ic, parameters.Eta, i));
-                systemState_tm1.Add(_assembleStateVector(coords, ic, parameters.Eta, i));
+                systemState.Add(_assembleStateVector(coords, ic, parameters.Eta, parameters.EtaNeg, i));
+                systemState_tm1.Add(_assembleStateVector(coords, ic, parameters.Eta, parameters.EtaNeg, i));
             }
         }
 
@@ -132,6 +137,23 @@ namespace NetworkDynamics
             for (int i = 0; i < parameters.N; i++)
                 adjList.Add(new List<int>(20));
 
+            if (parameters.Weights) //for weighted systems separate inhibitory form excitory edjes.
+            {
+                //initialize the inhibitory adjList
+                adjListInhibitory = new List<List<int>>(parameters.N);
+                for (int i = 0; i < parameters.N; i++)
+                    adjListInhibitory.Add(new List<int>(20));
+
+                Parallel.For(0, parameters.N, (i) =>
+                {
+                    for (int j = 0; j < parameters.N; j++)
+                        if (adjMat[i][j] > 0)
+                            adjList[i].Add(j);
+                        else if (adjMat[i][j] < 0)
+                            adjListInhibitory[i].Add(j);
+                });
+            }
+            else
             // populate with non-zero j indecies
             Parallel.For(0, parameters.N, (i) =>
             {
@@ -235,13 +257,42 @@ namespace NetworkDynamics
         private void ApplyRandomWeights()
         // ApplyRandomWeights - applys random non-negative weights to the edges.
         {
+            //adjMatScaled = new double[parameters.N, parameters.N];
+            double scaleFactorInh = parameters.Beta / parameters.Alpha;
+
             for (int i = 0; i < parameters.N; i++)
                 for (int j = 0; j < parameters.N; j++) // only go through the upper diagonal entries.
                     if (i != j && adjMat[i][j] != 0)
                     {
                         //if (adjMat[i][j] < 0) adjMat[i][j] = -0.2;
                         //else adjMat[i][j] = rdn.NextDouble();
+
+                        // assign random weights in the interval [-1,1]
                         adjMat[i][j] = 1 - 2d * rdn.NextDouble();
+
+                        /*
+                        // populate the scaled matrix.
+                        if (adjMat[i][j] < 0)
+                            adjMatScaled[i, j] = scaleFactorInh * adjMat[i][j];
+                        else
+                            adjMatScaled[i, j] = adjMat[i][j];
+                            */
+                    }
+        }
+
+        private void RescaleAdjMat()
+            // RescaleAdjMat - rescales the Inhibitory entries.
+        {
+            double scaleFactorInh = parameters.Beta / parameters.Alpha;
+            for (int i = 0; i < parameters.N; i++)
+                for (int j = 0; j < parameters.N; j++) // only go through the upper diagonal entries.
+                    if (i != j && adjMat[i][j] != 0)
+                    {
+                        // scale Inhibitory entries.
+                        if (adjMat[i][j] < 0)
+                            adjMatScaled[i, j] = scaleFactorInh * adjMat[i][j];
+                        else
+                            adjMatScaled[i, j] = adjMat[i][j];
                     }
         }
 
@@ -362,29 +413,31 @@ namespace NetworkDynamics
 
         public void ResetState(double IC)
         {
-            ResetState(GetInitialCondition(IC), parameters.Eta);
+            ResetState(GetInitialCondition(IC), parameters.Eta, parameters.EtaNeg);
         }
 
-        public void ResetState(int state, double background)
+        public void ResetState(int state, double background, double extRate)
             //ResetState - resets systemState and systemState_tm1, to the default background and activation levels.
         {
             for (int i = 0; i < systemState.Count; i++)
-                _ResetState(state, background, i);   
+                _ResetState(state, background, extRate, i);   
         }
 
-        public void ResetState(List<int> state, double background)
+        public void ResetState(List<int> state, double background, double extRate)
             //ResetState - resets systemState and systemState_tm1, to the default background and activation levels.
         {
             for (int i = 0; i < systemState.Count; i++)
-                _ResetState(state[i], background, i);
+                _ResetState(state[i], background, extRate, i);
         }
 
-        private void _ResetState(int state, double background, int i)
+        private void _ResetState(int state, double background, double extRate, int i)
         {
             systemState[i][2] = state;
             systemState[i][3] = background;
+            systemState[i][4] = extRate;
             systemState_tm1[i][2] = state;
             systemState_tm1[i][3] = background;
+            systemState_tm1[i][4] = extRate;
         }
 
         public void updateConcentration(double eta, double alpha, double gamma)
@@ -394,7 +447,7 @@ namespace NetworkDynamics
         {
             int size = adjMat.Count;
             for (int i = 0; i < size; i++)
-                _updateConcList(eta, alpha, gamma, i, size);
+                _updateConcList(eta, parameters.EtaNeg, alpha, parameters.Beta, gamma, i, size);
                 //_updateConcList(R, background, i, size); // now using the adjList!
                 //_updateConc(R, background, i, size); // now using the adjMat!
         }
@@ -429,18 +482,30 @@ namespace NetworkDynamics
             systemState[i][3] = background + spike;
         }
 
-        private void _updateConcList(double eta, double alpha, double gamma, int i, int size)
+        private void _updateConcList(double eta, double etaNeg, double alpha, double beta, double gamma, int i, int size)
         // this method uses the adjList to update background.
         {
             double spike = 0;
+            double inhibition = 0;
+
             if (parameters.Weights) //adjMat[i][non_zero_j] - can be omitted if a[ij] is 0 or 1 resulting in ~13% performance gain.
-                foreach (int non_zero_j in adjList[i])
-                    spike += systemState_tm1[non_zero_j][2] * adjMat[i][non_zero_j]; 
+            {
+                foreach (int non_zero_j in adjList[i]) // calculate excitation
+                    spike += systemState_tm1[non_zero_j][2] * adjMat[non_zero_j][i];
+                foreach (int non_zero_j in adjListInhibitory[i]) // calculate inhibition
+                    inhibition += systemState_tm1[non_zero_j][2] * adjMat[non_zero_j][i];
+
+                spike -= inhibition * beta / alpha; // divide by alpha to cancel out downstream mult by alpha. 
+                systemState[i][4] = etaNeg * Math.Pow((1 + beta * inhibition), gamma); // update BackRate
+            }
             else
                 foreach (int non_zero_j in adjList[i])
                     spike += systemState_tm1[non_zero_j][2];
 
-            systemState[i][3] = eta * Math.Pow((1 + alpha * spike), gamma);
+            if (1 + alpha * spike < 0) // if forward rate is negative set it to zero;
+                systemState[i][3] = 0;
+            else
+                systemState[i][3] = eta * Math.Pow(1 + alpha * spike, gamma); // update forward rate.
         }
 
         public void ApplyR(double R)
@@ -493,12 +558,12 @@ namespace NetworkDynamics
                     //double probability = parameters.G * Math.Pow(systemState[i][3], parameters.Gamma);
                     
                     //if (rdn.NextDouble() < probability) //runs the probability of transitioning from 0 -> 1
-                      if (rdn.NextDouble() < systemState[i][3] * inPars.Beta) //!!!!! here Beta is dT!!
+                      if (rdn.NextDouble() < systemState[i][3] * inPars.dt) //!!!!! here Beta is dT!!
                             systemState[i][2] = 1;
                 }
                 if (systemState_tm1[i][2] == 1)
                 {
-                    if (rdn.NextDouble() < inPars.Beta)    //probability of transitioning from 1 -> 0
+                    if (rdn.NextDouble() < systemState[i][4] * inPars.dt)    //probability of transitioning from 1 -> 0
                         systemState[i][2] = 0;
                 }
             }
@@ -576,9 +641,9 @@ namespace NetworkDynamics
             return temp;
         }
 
-        private double[] _assembleStateVector(CoordPoint[] coords, List<int> ic, double cZero, int i)
+        private double[] _assembleStateVector(CoordPoint[] coords, List<int> ic, double cZero, double BackRate, int i)
         {
-            return new double[] { coords[i].x, coords[i].y, ic[i], cZero };
+            return new double[] { coords[i].x, coords[i].y, ic[i], cZero, BackRate };
         }
 
         private static System.Collections.IEnumerable range(int range)
@@ -589,19 +654,21 @@ namespace NetworkDynamics
 
     public class SystemParameters
     {
-        public double Eta, Alpha, Gamma, Beta, Connectivity, K;
+        public double Eta, Alpha, Gamma, Beta, Connectivity, K, dt, EtaNeg;
         public int N, nClustes;
         public CoordPoint bc;
         public string NetType; // powerLaw(BA), uniform(ER), dist(dist)
         public bool DirectedNetwork, Weights;
 
-        public SystemParameters(double Alpha, double Eta, double Gamma, double Beta, double Connectivity,
+        public SystemParameters(double Alpha, double Eta, double Gamma, double Beta, double EtaNeg, double dt, double Connectivity,
                                 int N, double K, int nClustes, string NetType, CoordPoint bc, bool DirectedNetwork, bool Weights)
         {
             this.Eta = Eta;
             this.Alpha = Alpha;
             this.Gamma = Gamma;
             this.Beta = Beta;
+            this.EtaNeg = EtaNeg; 
+            this.dt = dt;
             this.Connectivity = Connectivity;
             this.N = N;
             this.K = K;
@@ -610,6 +677,7 @@ namespace NetworkDynamics
             this.bc = bc;
             this.DirectedNetwork = DirectedNetwork;
             this.Weights = Weights;
+            
         }
         public SystemParameters(SystemParameters p)
         {
@@ -617,6 +685,8 @@ namespace NetworkDynamics
             this.Alpha = p.Alpha;
             this.Gamma = p.Gamma;
             this.Beta = p.Beta;
+            this.EtaNeg = p.EtaNeg;
+            this.dt = p.dt;
             this.Connectivity = p.Connectivity;
             this.N = p.N;
             this.K = p.K;
@@ -625,6 +695,7 @@ namespace NetworkDynamics
             this.bc = p.bc;
             this.DirectedNetwork = p.DirectedNetwork;
             this.Weights = p.Weights;
+            
         }
 
         public double? GetParameter(string name)
