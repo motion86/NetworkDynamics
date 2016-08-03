@@ -495,8 +495,8 @@ namespace NetworkDynamics
                 foreach (int non_zero_j in adjListInhibitory[i]) // calculate inhibition
                     inhibition += systemState_tm1[non_zero_j][2] * adjMat[non_zero_j][i];
 
-                spike -= inhibition * beta / alpha; // divide by alpha to cancel out downstream mult by alpha. 
-                systemState[i][4] = etaNeg * Math.Pow((1 + beta * inhibition), gamma); // update BackRate
+                spike += inhibition * beta / alpha; // divide by alpha to cancel out downstream mult by alpha. 
+                systemState[i][4] = etaNeg * Math.Pow((1 - beta * inhibition), gamma); // update BackRate
             }
             else
                 foreach (int non_zero_j in adjList[i])
