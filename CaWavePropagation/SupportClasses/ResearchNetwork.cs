@@ -160,7 +160,7 @@ namespace NetworkDynamics
                 {
                     adjMat[i][i + 1] = 1;
                     if (!oneWay)
-                        adjMat[i + 1][i] = 1;
+                        adjMat[i + 1][i] = -1;
 
                 }
                 else if (closeLoop) // connect last node to first.

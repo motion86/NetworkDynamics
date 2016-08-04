@@ -136,7 +136,7 @@ namespace NetworkDynamics
             adjList = new List<List<int>>(parameters.N);
             for (int i = 0; i < parameters.N; i++)
                 adjList.Add(new List<int>(20));
-
+            /*
             if (parameters.Weights) //for weighted systems separate inhibitory form excitory edjes.
             {
                 //initialize the inhibitory adjList
@@ -154,6 +154,7 @@ namespace NetworkDynamics
                 });
             }
             else
+            */
             // populate with non-zero j indecies
             Parallel.For(0, parameters.N, (i) =>
             {
@@ -268,7 +269,7 @@ namespace NetworkDynamics
                         //else adjMat[i][j] = rdn.NextDouble();
 
                         // assign random weights in the interval [-1,1]
-                        adjMat[i][j] = 1 - 2d * rdn.NextDouble();
+                        //adjMat[i][j] = 1 - 2d * rdn.NextDouble();
 
                         /*
                         // populate the scaled matrix.
@@ -490,11 +491,15 @@ namespace NetworkDynamics
 
             if (parameters.Weights) //adjMat[i][non_zero_j] - can be omitted if a[ij] is 0 or 1 resulting in ~13% performance gain.
             {
-                foreach (int non_zero_j in adjList[i]) // calculate excitation
-                    spike += systemState_tm1[non_zero_j][2] * adjMat[non_zero_j][i];
-                foreach (int non_zero_j in adjListInhibitory[i]) // calculate inhibition
-                    inhibition += systemState_tm1[non_zero_j][2] * adjMat[non_zero_j][i];
-
+                double Aji = 0;
+                foreach (int non_zero_j in adjList[i])  // calculate excitation
+                {
+                    Aji = adjMat[non_zero_j][i]; // incoming edges.
+                    if (Aji > 0) // positive edges are excitatory
+                        spike += systemState_tm1[non_zero_j][2] * Aji; 
+                    else // negative edges are inhibitory
+                        inhibition += systemState_tm1[non_zero_j][2] * Aji;
+                }
                 spike += inhibition * beta / alpha; // divide by alpha to cancel out downstream mult by alpha. 
                 systemState[i][4] = etaNeg * Math.Pow((1 - beta * inhibition), gamma); // update BackRate
             }
