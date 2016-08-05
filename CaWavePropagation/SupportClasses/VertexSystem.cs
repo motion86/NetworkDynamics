@@ -136,25 +136,7 @@ namespace NetworkDynamics
             adjList = new List<List<int>>(parameters.N);
             for (int i = 0; i < parameters.N; i++)
                 adjList.Add(new List<int>(20));
-            /*
-            if (parameters.Weights) //for weighted systems separate inhibitory form excitory edjes.
-            {
-                //initialize the inhibitory adjList
-                adjListInhibitory = new List<List<int>>(parameters.N);
-                for (int i = 0; i < parameters.N; i++)
-                    adjListInhibitory.Add(new List<int>(20));
-
-                Parallel.For(0, parameters.N, (i) =>
-                {
-                    for (int j = 0; j < parameters.N; j++)
-                        if (adjMat[i][j] > 0)
-                            adjList[i].Add(j);
-                        else if (adjMat[i][j] < 0)
-                            adjListInhibitory[i].Add(j);
-                });
-            }
-            else
-            */
+            
             // populate with non-zero j indecies
             Parallel.For(0, parameters.N, (i) =>
             {
