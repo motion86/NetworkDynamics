@@ -216,6 +216,24 @@ namespace NetworkDynamics
             return tokensValues;
         }
 
+        public static string GetValue(List<string[]> pars, string tag)
+            // look for the tag and return the value, if not found returns null.
+            // expects data in the form of {tag, val}
+        {
+            if (pars == null) return null;
+
+            foreach(string[] p in pars)
+            {
+                try
+                {
+                    if (p[0] == tag)
+                        return p[1];
+                }
+                catch { }
+            }
+            return null;
+        }
+
         public static void RemoveCharFromFileName(string sourcePath, int pathIndexToRemove)
             // RemoveCharFromFileName - this methord renames the file in the source path by removing the a 
             //                          character at a specified index from the begining of the path.

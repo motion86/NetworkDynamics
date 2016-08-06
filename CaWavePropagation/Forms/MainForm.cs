@@ -151,6 +151,10 @@ namespace NetworkDynamics
         public SystemParameters packSystemParameters()
         // packSystemParameters - returns a new SystemParameters object populated with current param values.
         {
+            List<string[]> specPars = null;
+            if (tbSpecialPars.Text != (string)tbSpecialPars.Tag) // get the special pars.
+                specPars = FileIO.ExtractTokens($"{tbSpecialPars.Text}.", '_', ':');
+
             return new SystemParameters(        (double)numAlpha.Value,
                                                 (double)numEta.Value,
                                                 (double)numGama.Value,
@@ -164,7 +168,8 @@ namespace NetworkDynamics
                                                 netTypes[netType],
                                                 new CoordPoint((double)numX.Value, (double)numY.Value),
                                                 cbDirected.Checked,
-                                                cbRandWeights.Checked);
+                                                cbRandWeights.Checked,
+                                                specPars);
         }
 
         public void genNet(string path)

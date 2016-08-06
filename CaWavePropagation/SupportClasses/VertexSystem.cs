@@ -33,9 +33,9 @@ namespace NetworkDynamics
 
         public VertexSystem(List<double[]> stateAtT, List<double[]> distMatrix)
         {
-            systemState = listCopy(stateAtT);
-            systemState_tm1 = listCopy(stateAtT);
-            adjMat = listCopy(distMatrix);
+            systemState = DataTools.listCopy(stateAtT);
+            systemState_tm1 = DataTools.listCopy(stateAtT);
+            adjMat = DataTools.listCopy(distMatrix);
 
             this.rdn = new Random();
             //this.background = background;
@@ -52,10 +52,10 @@ namespace NetworkDynamics
 
         public VertexSystem(VertexSystem v)
         {
-            systemState = listCopy(v.systemState);
-            systemState_tm1 = listCopy(v.systemState);
-            adjMat = listCopy(v.adjMat);
-            adjList = listCopy(v.adjList);
+            systemState = DataTools.listCopy(v.systemState);
+            systemState_tm1 = DataTools.listCopy(v.systemState);
+            adjMat = DataTools.listCopy(v.adjMat);
+            adjList = DataTools.listCopy(v.adjList);
 
             parameters = new SystemParameters(v.parameters);
 
@@ -182,10 +182,16 @@ namespace NetworkDynamics
         // generates the network adjMatrix.
         {
             adjMat = new List<double[]>();
+            bool useWeightedAlgorithmForDynamics = false;
             if (parameters.NetType.Equals("BA")) //powerLaw - Barabási–Albert
             {
                 ResearchNetwork barbasi = new ResearchNetwork(parameters.N, (int)parameters.K, parameters.nClustes);
                 adjMat = barbasi.adjMatrix;
+            }
+            else if (parameters.NetType.Equals(netTypes[3])) // Chain network.
+            {
+                bool closeLoop = parameters.K > 1; // connect tail to head if K > 1
+                useWeightedAlgorithmForDynamics = ResearchNetwork.ChainNet(adjMat, parameters.N, closeLoop, parameters.DirectedNetwork, parameters.SpecialPars);
             }
             else
             {
@@ -220,11 +226,7 @@ namespace NetworkDynamics
                             else adjMat[i][j] = 0;
                             adjMat[j][i] = adjMat[i][j]; //symertry
                         }
-                        else if (parameters.NetType.Equals(netTypes[3])) // Chain network.
-                        {
-                            bool closeLoop = parameters.K > 1; // connect tail to head if K > 1
-                            ResearchNetwork.ChainNet(adjMat, closeLoop, parameters.DirectedNetwork);
-                        }
+                        
                     }
                     //adjMat[i] = dist;
                 }
@@ -233,6 +235,9 @@ namespace NetworkDynamics
                 GetDirectedNetwork();
             if (parameters.Weights && !parameters.NetType.Equals(netTypes[0])) // randomize connection directions if not a circle net.
                 ApplyRandomWeights();
+
+            if (!parameters.Weights && useWeightedAlgorithmForDynamics) // if special weights are used bypassing the ApplyRandomWeights() this statement makes sure the right algo is used for the dynamics
+                parameters.Weights = true;
 
             if (adjMat != null) ready = true;
         }
@@ -251,7 +256,7 @@ namespace NetworkDynamics
                         //else adjMat[i][j] = rdn.NextDouble();
 
                         // assign random weights in the interval [-1,1]
-                        //adjMat[i][j] = 1 - 2d * rdn.NextDouble();
+                        adjMat[i][j] = 1 - 2d * rdn.NextDouble();
 
                         /*
                         // populate the scaled matrix.
@@ -304,36 +309,7 @@ namespace NetworkDynamics
                     }
         }
 
-        private List<double[]> listCopy(List<double[]> listToCopy)
-            // Deep Copies a list of double[]
-        {
-            List<double[]> copy = new List<double[]>(listToCopy.Count);
-            int arrSize = listToCopy[0].Length;
-            foreach (double[] arr in listToCopy)
-            {
-                double[] arr_copy = new double[arrSize];
-                for (int i = 0; i < arrSize; i++)
-                    arr_copy[i] = arr[i];
-                copy.Add(arr_copy);
-            }
-            return copy;
-        }
-
-        private List<List<T>> listCopy<T>(List<List<T>> listToCopy)
-        // Deep Copies a list of double[]
-        {
-            List<List<T>> copy = new List<List<T>>(listToCopy.Count);
-            
-            foreach (List<T> arr in listToCopy)
-            {
-                int arrSize = arr.Count;
-                List<T> arr_copy = new List<T>(arrSize);
-                for (int i = 0; i < arrSize; i++)
-                    arr_copy.Add(arr[i]);
-                copy.Add(arr_copy);
-            }
-            return copy;
-        }
+        
 
         public List<int> getActiveNodes()
             // getActiveNodes - returns a list of the indecies of the active nodes.
@@ -646,9 +622,10 @@ namespace NetworkDynamics
         public CoordPoint bc;
         public string NetType; // powerLaw(BA), uniform(ER), dist(dist)
         public bool DirectedNetwork, Weights;
+        public List<string[]> SpecialPars;
 
         public SystemParameters(double Alpha, double Eta, double Gamma, double Beta, double EtaNeg, double dt, double Connectivity,
-                                int N, double K, int nClustes, string NetType, CoordPoint bc, bool DirectedNetwork, bool Weights)
+                                int N, double K, int nClustes, string NetType, CoordPoint bc, bool DirectedNetwork, bool Weights, List<string[]> SpecialPars)
         {
             this.Eta = Eta;
             this.Alpha = Alpha;
@@ -661,9 +638,10 @@ namespace NetworkDynamics
             this.K = K;
             this.nClustes = nClustes;
             this.NetType = NetType;
-            this.bc = bc;
+            this.bc = new CoordPoint(bc.x, bc.x);
             this.DirectedNetwork = DirectedNetwork;
             this.Weights = Weights;
+            this.SpecialPars = DataTools.listCopy(SpecialPars);
             
         }
         public SystemParameters(SystemParameters p)
@@ -679,10 +657,11 @@ namespace NetworkDynamics
             this.K = p.K;
             this.nClustes = p.nClustes;
             this.NetType = p.NetType;
-            this.bc = p.bc;
+            this.bc = new CoordPoint(p.bc.x, p.bc.x);
             this.DirectedNetwork = p.DirectedNetwork;
             this.Weights = p.Weights;
-            
+            this.SpecialPars = DataTools.listCopy(p.SpecialPars);
+
         }
 
         public double? GetParameter(string name)

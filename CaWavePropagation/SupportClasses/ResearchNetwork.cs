@@ -150,26 +150,41 @@ namespace NetworkDynamics
             return adjMat;
         }
 
-        public static void ChainNet(List<double[]> adjMat, bool closeLoop, bool oneWay)
+        public static bool ChainNet(List<double[]> adjMat, int size, bool closeLoop, bool oneWay, List<string[]> specialPars)
             // ChainNet - chains up all nodes in the network one after the other.
         {
-            int size = adjMat.Count;
+            //Get the values from the special parameter's array
+            string temp_fwd = FileIO.GetValue(specialPars, "fwd");
+            string temp_bkw = FileIO.GetValue(specialPars, "bkw");
+            // if null set to 1
+            double fwd = temp_fwd != null ? Double.Parse(temp_fwd) : 1d;
+            double bkw = temp_bkw != null ? Double.Parse(temp_bkw) : 1d;
+
+            for (int i = 0; i < size; i++)
+            {
+                double[] dist = new double[size];
+                adjMat.Add(new double[size]);
+            }
             for (int i = 0; i < size; i++)
             {
                 if (i < size - 1)
                 {
-                    adjMat[i][i + 1] = 1;
+                    adjMat[i][i + 1] = 1 * fwd;
                     if (!oneWay)
-                        adjMat[i + 1][i] = -1;
+                        adjMat[i + 1][i] = 1 * bkw;
 
                 }
                 else if (closeLoop) // connect last node to first.
                 {
-                    adjMat[i][0] = 1;
+                    adjMat[i][0] = 1 * fwd;
                     if (!oneWay)
-                        adjMat[0][i] = 1;
+                        adjMat[0][i] = 1 * bkw;
                 }
             }
+            if (temp_fwd != null || temp_bkw != null)
+                return true;
+            else
+                return false;
         }
 
         private int getSumOfDeg(List<double[]> adjMat, int upto)

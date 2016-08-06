@@ -105,6 +105,7 @@
             this.numInfect = new System.Windows.Forms.NumericUpDown();
             this.cbInfect = new System.Windows.Forms.CheckBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.tbSpecialPars = new System.Windows.Forms.TextBox();
             this.cbRandWeights = new System.Windows.Forms.CheckBox();
             this.rbChain = new System.Windows.Forms.RadioButton();
             this.cbDirected = new System.Windows.Forms.CheckBox();
@@ -530,7 +531,7 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.numX);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Location = new System.Drawing.Point(243, 9);
+            this.groupBox2.Location = new System.Drawing.Point(266, 9);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(108, 104);
             this.groupBox2.TabIndex = 11;
@@ -814,9 +815,9 @@
             this.groupBox4.Controls.Add(this.label_gamma);
             this.groupBox4.Controls.Add(this.numK);
             this.groupBox4.Controls.Add(this.numGama);
-            this.groupBox4.Location = new System.Drawing.Point(380, 6);
+            this.groupBox4.Location = new System.Drawing.Point(380, 9);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(108, 107);
+            this.groupBox4.Size = new System.Drawing.Size(108, 104);
             this.groupBox4.TabIndex = 20;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "System Setup";
@@ -1260,6 +1261,7 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.tbSpecialPars);
             this.groupBox7.Controls.Add(this.cbRandWeights);
             this.groupBox7.Controls.Add(this.rbChain);
             this.groupBox7.Controls.Add(this.cbDirected);
@@ -1272,19 +1274,28 @@
             this.groupBox7.Controls.Add(this.numNet);
             this.groupBox7.Location = new System.Drawing.Point(6, 9);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(231, 104);
+            this.groupBox7.Size = new System.Drawing.Size(254, 104);
             this.groupBox7.TabIndex = 45;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Select Network Type";
             // 
+            // tbSpecialPars
+            // 
+            this.tbSpecialPars.Location = new System.Drawing.Point(65, 75);
+            this.tbSpecialPars.Name = "tbSpecialPars";
+            this.tbSpecialPars.Size = new System.Drawing.Size(179, 20);
+            this.tbSpecialPars.TabIndex = 55;
+            this.tbSpecialPars.Tag = "Special Parameters";
+            this.tbSpecialPars.Text = "Special Parameters";
+            // 
             // cbRandWeights
             // 
             this.cbRandWeights.AutoSize = true;
-            this.cbRandWeights.Location = new System.Drawing.Point(140, 77);
+            this.cbRandWeights.Location = new System.Drawing.Point(65, 36);
             this.cbRandWeights.Name = "cbRandWeights";
-            this.cbRandWeights.Size = new System.Drawing.Size(91, 17);
+            this.cbRandWeights.Size = new System.Drawing.Size(63, 17);
             this.cbRandWeights.TabIndex = 54;
-            this.cbRandWeights.Text = "RandWeights";
+            this.cbRandWeights.Text = "RandW";
             this.cbRandWeights.UseVisualStyleBackColor = true;
             // 
             // rbChain
@@ -1301,7 +1312,7 @@
             // cbDirected
             // 
             this.cbDirected.AutoSize = true;
-            this.cbDirected.Location = new System.Drawing.Point(75, 77);
+            this.cbDirected.Location = new System.Drawing.Point(65, 17);
             this.cbDirected.Name = "cbDirected";
             this.cbDirected.Size = new System.Drawing.Size(66, 17);
             this.cbDirected.TabIndex = 52;
@@ -1311,7 +1322,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(114, 46);
+            this.label8.Location = new System.Drawing.Point(139, 46);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(57, 13);
             this.label8.TabIndex = 51;
@@ -1319,7 +1330,7 @@
             // 
             // numClusters
             // 
-            this.numClusters.Location = new System.Drawing.Point(175, 43);
+            this.numClusters.Location = new System.Drawing.Point(200, 43);
             this.numClusters.Minimum = new decimal(new int[] {
             1,
             0,
@@ -1373,7 +1384,7 @@
             // label_conn
             // 
             this.label_conn.AutoSize = true;
-            this.label_conn.Location = new System.Drawing.Point(122, 19);
+            this.label_conn.Location = new System.Drawing.Point(147, 19);
             this.label_conn.Name = "label_conn";
             this.label_conn.Size = new System.Drawing.Size(51, 13);
             this.label_conn.TabIndex = 6;
@@ -1387,7 +1398,7 @@
             0,
             0,
             131072});
-            this.numNet.Location = new System.Drawing.Point(175, 17);
+            this.numNet.Location = new System.Drawing.Point(200, 17);
             this.numNet.Minimum = new decimal(new int[] {
             1,
             0,
@@ -3020,6 +3031,7 @@
         private System.Windows.Forms.NumericUpDown numBeta;
         private System.Windows.Forms.NumericUpDown numEtaNeg;
         private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.TextBox tbSpecialPars;
     }
 }
 

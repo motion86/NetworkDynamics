@@ -8,6 +8,58 @@ namespace NetworkDynamics
 {
     public class DataTools
     {
+        public static List<double[]> listCopy(List<double[]> listToCopy)
+        // Deep Copies a list of double[]
+        {
+            if (listToCopy == null) return null;
+
+            List<double[]> copy = new List<double[]>(listToCopy.Count);
+            int arrSize = listToCopy[0].Length;
+            foreach (double[] arr in listToCopy)
+            {
+                double[] arr_copy = new double[arrSize];
+                for (int i = 0; i < arrSize; i++)
+                    arr_copy[i] = arr[i];
+                copy.Add(arr_copy);
+            }
+            return copy;
+        }
+
+        public static List<string[]> listCopy(List<string[]> listToCopy)
+        // Deep Copies a list of stirng[]
+        {
+            if (listToCopy == null) return null;
+
+            List<string[]> copy = new List<string[]>(listToCopy.Count);
+            foreach (string[] arr in listToCopy)
+            {
+                int arrSize = arr.Length;
+                string[] arr_copy = new string[arrSize];
+                for (int i = 0; i < arrSize; i++)
+                    arr_copy[i] = String.Copy(arr[i]);
+                copy.Add(arr_copy);
+            }
+            return copy;
+        }
+
+        public static List<List<T>> listCopy<T>(List<List<T>> listToCopy)
+        // Deep Copies a list of double[]
+        {
+            if (listToCopy == null) return null;
+
+            List<List<T>> copy = new List<List<T>>(listToCopy.Count);
+
+            foreach (List<T> arr in listToCopy)
+            {
+                int arrSize = arr.Count;
+                List<T> arr_copy = new List<T>(arrSize);
+                for (int i = 0; i < arrSize; i++)
+                    arr_copy.Add(arr[i]);
+                copy.Add(arr_copy);
+            }
+            return copy;
+        }
+
         public static Dictionary<int, int> binDataOne(List<double> data, Dictionary<int, int> dataBins)
         // @binDataOne - function takes a data list and returns the bins as dictationary.
         // @param data - the data list.
