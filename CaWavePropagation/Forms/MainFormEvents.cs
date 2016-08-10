@@ -240,7 +240,7 @@ namespace NetworkDynamics
 
         private void button3_Click(object sender, EventArgs e)
         {
-            saveAdjMatToFile();
+            system.SaveAdjMatToFile();
         }
 
         private void btnSaveEigenCsv_Click(object sender, EventArgs e)

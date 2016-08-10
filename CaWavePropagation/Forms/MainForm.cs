@@ -42,10 +42,10 @@ namespace NetworkDynamics
         private List<string> archivedItems; // stores the file paths to experiment files loaded in ExploreResults tab.
 
         private string[] netTypes = { "DF", "ER", "BA", "CH" };                 // Diffusive, Erdős–Rényi, Barabási–Albert
-        private string[] experimentCode = { "X1", "X2", "X3", "X4", "X5", "X6"}; // X1 - ; X2 - ; 
-                                                                            // X3 - Examines the power of the top 10 sites vs the remaining.
-                                                                            // X4 - Produces a density of active sites over a long run for a range of the given parameter.
-                                                                            // X5 - Same as X4 but mixes 2 initial conditions (0 plus the one provided by the user) to provide a filler picture. 
+        private string[] experimentCode = { "X1", "X2", "X3", "X4", "X5", "X6" }; // X1 - ; X2 - ; 
+                                                                                  // X3 - Examines the power of the top 10 sites vs the remaining.
+                                                                                  // X4 - Produces a density of active sites over a long run for a range of the given parameter.
+                                                                                  // X5 - Same as X4 but mixes 2 initial conditions (0 plus the one provided by the user) to provide a filler picture. 
         public static int experimentIndex;
         private int netType;
 
@@ -155,7 +155,7 @@ namespace NetworkDynamics
             if (tbSpecialPars.Text != (string)tbSpecialPars.Tag) // get the special pars.
                 specPars = FileIO.ExtractTokens($"{tbSpecialPars.Text}.", '_', ':');
 
-            return new SystemParameters(        (double)numAlpha.Value,
+            return new SystemParameters((double)numAlpha.Value,
                                                 (double)numEta.Value,
                                                 (double)numGama.Value,
                                                 (double)numBeta.Value,
@@ -170,6 +170,26 @@ namespace NetworkDynamics
                                                 cbDirected.Checked,
                                                 cbRandWeights.Checked,
                                                 specPars);
+        }
+
+        public void UnpackParameters(SystemParameters pars)
+        // UnpackParameters - updates the GUI values with the ones passed in.
+        {
+            numAlpha.Value = (decimal)pars.Alpha;
+            numEta.Value = (decimal)pars.Eta;
+            numGama.Value = (decimal)pars.Gamma;
+            numBeta.Value = (decimal)pars.Beta;
+            numEtaNeg.Value = (decimal)pars.EtaNeg;
+            numDt.Value = (decimal)pars.dt;
+            numNet.Value = (decimal)pars.K;
+            numVertecies.Value = (decimal)pars.N;
+            numK.Value = (decimal)pars.K;
+            numClusters.Value = (decimal)pars.nClustes;
+            netTypes[netType] = pars.NetType;
+            numX.Value = (decimal)pars.bc.x;
+            numY.Value = (decimal)pars.bc.y;
+            cbDirected.Checked = pars.DirectedNetwork;
+            cbRandWeights.Checked = pars.Weights;
         }
 
         public void genNet(string path)
@@ -200,7 +220,7 @@ namespace NetworkDynamics
                     //T2 = new Thread(() => loadMatrix(path)); T2.Start();
                     //T2.Join();
                     system = new VertexSystem(parameters, (double)numOnProb.Value, cbCircle.Checked, path); //throw if file name was incompatible.
-                    numVertecies.Value = parameters.N;
+                    UnpackParameters(parameters); // update GUI values.
                     if (parameters.N > 0)
                     {
                         tsInfoLabel.Text = "Matrix was successfully loaded!";
@@ -235,7 +255,9 @@ namespace NetworkDynamics
 
             if (!newSys)
             {
+                bool temp_weights = system.parameters.Weights; // this parameter can be modified internaly -> remember it's current state before passing in new struct.
                 system.parameters = parameters;
+                system.parameters.Weights = temp_weights;
                 system.ResetState((double)numOnProb.Value);
             }
 
@@ -265,17 +287,31 @@ namespace NetworkDynamics
                 system = new VertexSystem(parameters, (double)numOnProb.Value, cbCircle.Checked,
                                                             async (o, e) =>  //this code will be executed when the adjMat is ready.
                                                             {
-                                                                setUpNetSeries(); // add the edjes to the graphing area.
-                                                                await Task.Run(new Action(getNetProperties));
-                                                                await Task.Run(new Action(() => markHighOutbound((uint)numTopNodes.Value)));
-
-                                                                if (cbCalcDistMat.Checked)
-                                                                    await Task.Run(new Action(setUpDistMatrixPlot)); // prepare adjMat density plot.
-
-                                                                adjMatEigen = new Matrix(system.adjMat);
-                                                                enableControls(true);
-                                                                tsMatGenerator.Enabled = false; tsMatGenerator.Visible = false;
+                                                                await SetUpVizualizationComponents(newSys);
                                                             });
+            }
+            else if (newSys && loadMat)
+                await SetUpVizualizationComponents(newSys);
+            if(!newSys)
+                await SetUpVizualizationComponents(newSys);
+        }
+
+        private async Task SetUpVizualizationComponents(bool newSys)
+            // SetUpVizualizationComponents - 
+        {
+            if (newSys)
+            {
+                for (int i = 0; i < parameters.N; i++) vertexCinfo.Add(new VertexData());
+                setUpNetSeries(); // add the edjes to the graphing area.
+                await Task.Run(() => getNetProperties());
+                await Task.Run(() => markHighOutbound((uint)numTopNodes.Value));
+
+                if (cbCalcDistMat.Checked)
+                    await Task.Run(() => setUpDistMatrixPlot()); // prepare adjMat density plot.
+
+                adjMatEigen = new Matrix(system.adjMat);
+                enableControls(true);
+                tsMatGenerator.Enabled = false; tsMatGenerator.Visible = false;
             }
 
             chartSetup(); // initializes chart params.
@@ -288,26 +324,9 @@ namespace NetworkDynamics
 
             chart1.Series["S3"].Enabled = false;
 
-            if (loadMat && newSys)
-            {
-                setUpNetSeries(); // add the edjes to the graphing area.
-                await Task.Run(new Action(getNetProperties));
-                await Task.Run(new Action(() => markHighOutbound((uint)numTopNodes.Value)));
-            }
-            if (cbCalcDistMat.Checked && loadMat && newSys)
-                await Task.Run(new Action(setUpDistMatrixPlot)); // prepare adjMat density plot.
-
-            if (loadMat)
-            {
-                cbNew.Checked = false;
-                //T2.Join();
-                adjMatEigen = new Matrix(system.adjMat);
-                enableControls(true);
-            }
             chart1.Update();
             if (!newSys) enableControls(true);
-        }
-
+        }        
 
         private void enableControls(bool e)
         // Enable or disable controls which require an Adj Matrix to be loaded or created first.
@@ -411,7 +430,6 @@ namespace NetworkDynamics
         // SIMULATION FUNCTIONS vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 
-
         private void plotVertices(bool newSys)
         // plotVertices - manin network plot operations
         {
@@ -428,7 +446,7 @@ namespace NetworkDynamics
             for (int i = 0; i < parameters.N; i++)
             {
 
-                if (newSys) vertexCinfo.Add(new VertexData());
+                //if (newSys) vertexCinfo.Add(new VertexData());
 
                 timeEvolutionSeq[0][i] = 0;
 
@@ -524,10 +542,10 @@ namespace NetworkDynamics
         {
             for (int j = 0; j < parameters.N; j++)
             {
-                if (system.adjMat[i][j] == 1)
+                if (system.adjMat[i][j] != 0)
                 {
-                    vertexCinfo[i].inBound++;
-                    vertexCinfo[j].outBound++;
+                    vertexCinfo[j].inBound++;
+                    vertexCinfo[i].outBound++;
                 }
             }
         }
@@ -1205,7 +1223,7 @@ namespace NetworkDynamics
             Series EDG = chart1.Series["edges"];
             EDG.ChartType = SeriesChartType.Line;
             EDG.Color = Color.Green;
-            int vertexCount = (int)numVertecies.Value;
+            int vertexCount = parameters.N;
             EDG.Points.Clear();
             edges.Clear();
 
@@ -1214,7 +1232,7 @@ namespace NetworkDynamics
                 //int connectionCount = 0;
                 for (int q = 0; q < parameters.N; q++)
                 {
-                    if (system.adjMat[i][q] == 1) edges.Add(new Point(i, q));
+                    if (system.adjMat[i][q] != 0) edges.Add(new Point(i, q));
                 }
             }
 

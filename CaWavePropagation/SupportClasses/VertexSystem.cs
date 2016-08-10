@@ -75,8 +75,8 @@ namespace NetworkDynamics
             // Loads AdjMat from file.
         {
             parameters = pars;
-            if (!loadMatrix(path)) throw new Exception(); //throw if file name was incompatible.
-            parameters.N = adjMat.Count;
+            if (!loadMatrix(path).Result) throw new Exception(); //throw if file name was incompatible.
+            //parameters.N = adjMat.Count;
             sysSize = parameters.N;
             ready = true;
             this.rdn = new Random();
@@ -146,20 +146,13 @@ namespace NetworkDynamics
             });
         }
 
-        private bool loadMatrix(string path)
+        private async Task<bool> loadMatrix(string path)
         // load the adjacency matrix from file.
         {
             adjMat = new List<double[]>();
             FileIO f = new FileIO(path, false); // open a file for reading.
-
-            string matType = FileIO.getFileNameFromPath(path);
-            matType = matType.Slice(matType.IndexOf("-") + 1, matType.IndexOf("_"));
-            bool found = false;
-            foreach (int i in range(netTypes.Length))
-                if (matType.Equals(netTypes[i]))
-                { netType = i; found = true; }
-            if (!found) return false;
-
+            
+            if (!LoadMatrixUpdateParameters(path)) return false; // Update parameters object with extracted parameters.
 
             while (true)
             {
@@ -170,12 +163,62 @@ namespace NetworkDynamics
                 int i = 0; // set a counter.
                 foreach (double d in row)
                 {
-                    if (d != 0) adjMat[adjMat.Count - 1][i] = 1;
-                    else adjMat[adjMat.Count - 1][i] = 0;
+                    adjMat[adjMat.Count - 1][i] = d;
+                    //if (d != 0) adjMat[adjMat.Count - 1][i] = 1;
+                    //else adjMat[adjMat.Count - 1][i] = 0;
                     i++;
                 }
             }
+            GetAdjList();
             return true;
+        }
+
+        public void SaveAdjMatToFile()
+        // saveAdjMatToFile - saves the adjMatrix to a .mat file and tags it with today's date, time and size.
+        {
+            int weights = parameters.Weights ? 1 : 0;
+            string matName =    "MATRIX-" + netTypes[netType] +
+                                "_N#" + parameters.N.ToString("F0") +
+                                "_K#" + parameters.K.ToString("F3") +
+                                "_W#" + weights +
+                                "_Date#" + DateTime.Now.ToString("MM-dd-yyyy#HH-mm-ss") + 
+                                ".mat";
+
+            string path = FileIO.setupPathForFileWrite("Data", matName);
+            FileIO.saveMatrixToFile(path, new Matrix(adjMat));
+        }
+
+        private bool LoadMatrixUpdateParameters(string path)
+            // LoadMatrixUpdateParameters - extract the Matrix build parameters from the import file and updates the parameters object.
+        {
+            string fileName = FileIO.getFileNameFromPath(path);
+            string matType = fileName.Slice(fileName.IndexOf("-") + 1, fileName.IndexOf("_"));
+
+            bool found = false;
+            foreach (int i in range(netTypes.Length))
+                if (matType.Equals(netTypes[i]))
+                { netType = i; found = true; }
+            if (!found) return false;
+
+            var tagVals = FileIO.ExtractTokens(fileName, '_', '#');
+
+            switch (netTypes[netType])
+            {
+                case "DF":
+                    throw new NotImplementedException("Importing Euclidean is not supported at this time!");
+                default:
+                    {
+                        try
+                        {
+                            parameters.N = (int)Double.Parse(FileIO.GetValue(tagVals, "N"));
+                            parameters.K = Double.Parse(FileIO.GetValue(tagVals, "K"));
+                            parameters.Weights = Double.Parse(FileIO.GetValue(tagVals, "W")) == 1 ? true : false;
+                            return true;
+                        }
+                        catch { return false; }
+                    }
+            }
+
         }
 
         private void genAdjMat()
