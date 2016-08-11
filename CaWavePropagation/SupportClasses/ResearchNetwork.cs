@@ -21,7 +21,7 @@ namespace NetworkDynamics
         private int size;
         private int connectivity;
         private int nLinks;
-        private Random rdn;
+        private static Random rdn;
 
         public ResearchNetwork(int inSize)
             // Empty Network Constructor.
@@ -156,9 +156,13 @@ namespace NetworkDynamics
             //Get the values from the special parameter's array
             string temp_fwd = FileIO.GetValue(specialPars, "fwd");
             string temp_bkw = FileIO.GetValue(specialPars, "bkw");
+            bool rand = FileIO.GetValue(specialPars, "rand") != null ? true : false;
             // if null set to 1
             double fwd = temp_fwd != null ? Double.Parse(temp_fwd) : 1d;
             double bkw = temp_bkw != null ? Double.Parse(temp_bkw) : 1d;
+
+            if (rand && rdn == null)
+                rdn = new Random();
 
             for (int i = 0; i < size; i++)
             {
@@ -169,22 +173,49 @@ namespace NetworkDynamics
             {
                 if (i < size - 1)
                 {
-                    adjMat[i][i + 1] = 1 * fwd;
+                    adjMat[i][i + 1] = GetRandomWeight(fwd, rand);
                     if (!oneWay)
-                        adjMat[i + 1][i] = 1 * bkw;
+                        adjMat[i + 1][i] = GetRandomWeight(bkw, rand);
 
                 }
                 else if (closeLoop) // connect last node to first.
                 {
-                    adjMat[i][0] = 1 * fwd;
+                    adjMat[i][0] = GetRandomWeight(fwd, rand);
                     if (!oneWay)
-                        adjMat[0][i] = 1 * bkw;
+                        adjMat[0][i] = GetRandomWeight(bkw, rand);
                 }
             }
-            if (temp_fwd != null || temp_bkw != null)
-                return true;
+            
+            if (temp_fwd != null || temp_bkw != null) 
+                return true; // true to use Wighted Network Dynamics.
             else
                 return false;
+        }
+
+        private static double GetRandomWeight(double weight, bool rand)
+            // rand = false => returns weight
+            // rand = true, weight = -1 => returns neg. random num. [-1,0]
+            //            , weight = 0 => returns random in interval [-1,1]
+            //            , weight = 1 => returns pos random [0,1]
+        {
+            if (rand)
+            {
+                switch ((int)weight)
+                {
+                    case -1:
+                        return -rdn.NextDouble();
+                    case 0:
+                        return 1 - 2d * rdn.NextDouble();
+                    case 1:
+                        return rdn.NextDouble();
+                    default:
+                        return rdn.NextDouble();
+                }
+                
+            }
+            else
+                return weight;
+
         }
 
         private int getSumOfDeg(List<double[]> adjMat, int upto)

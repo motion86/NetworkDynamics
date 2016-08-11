@@ -12,10 +12,8 @@ namespace NetworkDynamics
     public partial class MainForm
     {
 
-
         // GUI events vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         // GUI events vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-
 
         private void trPlay_ValueChanged(object sender, EventArgs e)
         {

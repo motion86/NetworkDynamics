@@ -67,6 +67,7 @@ namespace NetworkDynamics
                 catch { }
             }
             tbarParamSet.ValueChanged += new System.EventHandler(tbarParamSet_ValueChanged);
+            tbSpecialPars.MouseDown += (s, e) => tbSpecialPars.SelectAll();
 
             tsInfoLabel.Visible = false;
             tsStatusBar.Visible = false;
@@ -1748,8 +1749,6 @@ namespace NetworkDynamics
         {
             plotHistOne();
         }
-
-
 
         private void exp2ExpNumbers()
         // shows a plot of the integral of the head vs the integral of N-head.

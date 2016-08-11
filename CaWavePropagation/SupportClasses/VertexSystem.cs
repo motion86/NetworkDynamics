@@ -205,7 +205,7 @@ namespace NetworkDynamics
             switch (netTypes[netType])
             {
                 case "DF":
-                    throw new NotImplementedException("Importing Euclidean is not supported at this time!");
+                    throw new NotImplementedException("Importing Euclidean Matrix is not supported at this time!");
                 default:
                     {
                         try
