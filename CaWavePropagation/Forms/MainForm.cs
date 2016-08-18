@@ -157,7 +157,7 @@ namespace NetworkDynamics
             List<string[]> specPars = null;
             if (tbSpecialPars.Text != (string)tbSpecialPars.Tag) // get the special pars.
                 specPars = FileIO.ExtractTokens($"{tbSpecialPars.Text}.", '_', ':');
-
+            
             return new SystemParameters((double)numAlpha.Value,
                                                 (double)numEta.Value,
                                                 (double)numGama.Value,
@@ -175,7 +175,7 @@ namespace NetworkDynamics
                                                 specPars,
                                                 cbTwoState.Checked);
         }
-
+        
         public void UnpackParameters(SystemParameters pars)
         // UnpackParameters - updates the GUI values with the ones passed in.
         {
@@ -1746,6 +1746,42 @@ namespace NetworkDynamics
             tbLambda.Text = $"{adjMatEigen.LambdaR[vectNum]:F3}\t{adjMatEigen.LambdaI[vectNum]:F3}i \n";
             for (int i = 0; i < adjMatEigen.LambdaR.Length; i++)
                 rtbEigVector.Text += $" {adjMatEigen.EigenVectors[i, vectNum]:F3}\n";
+        }
+
+        private void numGama_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.Gamma = (double)numGama.Value;
+        }
+
+        private void numDt_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.dt = (double)numDt.Value;
+        }
+
+        private void numAlpha_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.Alpha = (double)numAlpha.Value;
+        }
+
+        private void numBeta_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.Beta = (double)numBeta.Value;
+        }
+
+        private void numEta_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.Eta = (double)numEta.Value;
+        }
+
+        private void numEtaNeg_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.EtaNeg = (double)numEtaNeg.Value;
         }
 
         private void exp3bExpNumbers()

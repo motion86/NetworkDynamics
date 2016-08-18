@@ -372,6 +372,24 @@ namespace NetworkDynamics
             symRunStop = false;
         }
 
+        private void cbTwoState_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbTwoState.Checked && cbThreeState.Checked)
+                cbThreeState.Checked = false;
+            if (system != null)
+                system.parameters.DynamicModelTwoState = true;
+        }
+
+        private void cbThreeState_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbThreeState.Checked && cbTwoState.Checked)
+            {
+                cbTwoState.Checked = false;
+                if (system != null)
+                    system.parameters.DynamicModelTwoState = false;
+            }
+        }
+
 
         /// ////////////////////////////////////////////////////////////////////////////////////
 

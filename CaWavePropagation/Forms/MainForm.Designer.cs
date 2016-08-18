@@ -119,6 +119,9 @@
             this.cbNetConn = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabParams = new System.Windows.Forms.TabPage();
+            this.gbModel___ = new System.Windows.Forms.GroupBox();
+            this.cbThreeState = new System.Windows.Forms.CheckBox();
+            this.cbTwoState = new System.Windows.Forms.CheckBox();
             this.groupBox16 = new System.Windows.Forms.GroupBox();
             this.numTopNodes = new System.Windows.Forms.NumericUpDown();
             this.label32 = new System.Windows.Forms.Label();
@@ -228,9 +231,6 @@
             this.pbNext = new System.Windows.Forms.PictureBox();
             this.pbPause = new System.Windows.Forms.PictureBox();
             this.pbPlay = new System.Windows.Forms.PictureBox();
-            this.gbModel___ = new System.Windows.Forms.GroupBox();
-            this.cbTwoState = new System.Windows.Forms.CheckBox();
-            this.cbThreeState = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numVertecies)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -263,6 +263,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numNet)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabParams.SuspendLayout();
+            this.gbModel___.SuspendLayout();
             this.groupBox16.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTopNodes)).BeginInit();
             this.tabExp1.SuspendLayout();
@@ -300,7 +301,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPause)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
-            this.gbModel___.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -619,6 +619,7 @@
             0,
             0,
             0});
+            this.numAlpha.ValueChanged += new System.EventHandler(this.numAlpha_ValueChanged);
             // 
             // groupBox3
             // 
@@ -675,6 +676,7 @@
             0,
             0,
             65536});
+            this.numBeta.ValueChanged += new System.EventHandler(this.numBeta_ValueChanged);
             // 
             // numEtaNeg
             // 
@@ -698,12 +700,13 @@
             this.numEtaNeg.Name = "numEtaNeg";
             this.numEtaNeg.Size = new System.Drawing.Size(60, 20);
             this.numEtaNeg.TabIndex = 20;
-            this.numEtaNeg.Tag = "Eta";
+            this.numEtaNeg.Tag = "EtaNeg";
             this.numEtaNeg.Value = new decimal(new int[] {
             5,
             0,
             0,
             262144});
+            this.numEtaNeg.ValueChanged += new System.EventHandler(this.numEtaNeg_ValueChanged);
             // 
             // label33
             // 
@@ -753,6 +756,7 @@
             0,
             0,
             262144});
+            this.numEta.ValueChanged += new System.EventHandler(this.numEta_ValueChanged);
             // 
             // label_r
             // 
@@ -802,6 +806,7 @@
             0,
             0,
             0});
+            this.numGama.ValueChanged += new System.EventHandler(this.numGama_ValueChanged);
             // 
             // label_gamma
             // 
@@ -866,6 +871,7 @@
             0,
             0,
             65536});
+            this.numDt.ValueChanged += new System.EventHandler(this.numDt_ValueChanged);
             // 
             // label9
             // 
@@ -1463,6 +1469,41 @@
             this.tabParams.TabIndex = 0;
             this.tabParams.Text = "Parameters";
             this.tabParams.UseVisualStyleBackColor = true;
+            // 
+            // gbModel___
+            // 
+            this.gbModel___.Controls.Add(this.cbThreeState);
+            this.gbModel___.Controls.Add(this.cbTwoState);
+            this.gbModel___.Location = new System.Drawing.Point(380, 240);
+            this.gbModel___.Name = "gbModel___";
+            this.gbModel___.Size = new System.Drawing.Size(108, 64);
+            this.gbModel___.TabIndex = 55;
+            this.gbModel___.TabStop = false;
+            this.gbModel___.Text = "Dynamic Model";
+            // 
+            // cbThreeState
+            // 
+            this.cbThreeState.AutoSize = true;
+            this.cbThreeState.Location = new System.Drawing.Point(15, 41);
+            this.cbThreeState.Name = "cbThreeState";
+            this.cbThreeState.Size = new System.Drawing.Size(82, 17);
+            this.cbThreeState.TabIndex = 54;
+            this.cbThreeState.Text = "Three State";
+            this.cbThreeState.UseVisualStyleBackColor = true;
+            this.cbThreeState.CheckedChanged += new System.EventHandler(this.cbThreeState_CheckedChanged);
+            // 
+            // cbTwoState
+            // 
+            this.cbTwoState.AutoSize = true;
+            this.cbTwoState.Checked = true;
+            this.cbTwoState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbTwoState.Location = new System.Drawing.Point(15, 19);
+            this.cbTwoState.Name = "cbTwoState";
+            this.cbTwoState.Size = new System.Drawing.Size(75, 17);
+            this.cbTwoState.TabIndex = 53;
+            this.cbTwoState.Text = "Two State";
+            this.cbTwoState.UseVisualStyleBackColor = true;
+            this.cbTwoState.CheckedChanged += new System.EventHandler(this.cbTwoState_CheckedChanged);
             // 
             // groupBox16
             // 
@@ -2761,39 +2802,6 @@
             this.pbPlay.MouseLeave += new System.EventHandler(this.pbPlay_MouseLeave);
             this.pbPlay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbPlay_MouseUp);
             // 
-            // gbModel___
-            // 
-            this.gbModel___.Controls.Add(this.cbThreeState);
-            this.gbModel___.Controls.Add(this.cbTwoState);
-            this.gbModel___.Location = new System.Drawing.Point(380, 240);
-            this.gbModel___.Name = "gbModel___";
-            this.gbModel___.Size = new System.Drawing.Size(108, 64);
-            this.gbModel___.TabIndex = 55;
-            this.gbModel___.TabStop = false;
-            this.gbModel___.Text = "Dynamic Model";
-            // 
-            // cbTwoState
-            // 
-            this.cbTwoState.AutoSize = true;
-            this.cbTwoState.Checked = true;
-            this.cbTwoState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbTwoState.Location = new System.Drawing.Point(15, 19);
-            this.cbTwoState.Name = "cbTwoState";
-            this.cbTwoState.Size = new System.Drawing.Size(75, 17);
-            this.cbTwoState.TabIndex = 53;
-            this.cbTwoState.Text = "Two State";
-            this.cbTwoState.UseVisualStyleBackColor = true;
-            // 
-            // cbThreeState
-            // 
-            this.cbThreeState.AutoSize = true;
-            this.cbThreeState.Location = new System.Drawing.Point(15, 41);
-            this.cbThreeState.Name = "cbThreeState";
-            this.cbThreeState.Size = new System.Drawing.Size(82, 17);
-            this.cbThreeState.TabIndex = 54;
-            this.cbThreeState.Text = "Three State";
-            this.cbThreeState.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2859,6 +2867,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabParams.ResumeLayout(false);
             this.tabParams.PerformLayout();
+            this.gbModel___.ResumeLayout(false);
+            this.gbModel___.PerformLayout();
             this.groupBox16.ResumeLayout(false);
             this.groupBox16.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTopNodes)).EndInit();
@@ -2907,8 +2917,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPause)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).EndInit();
-            this.gbModel___.ResumeLayout(false);
-            this.gbModel___.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
