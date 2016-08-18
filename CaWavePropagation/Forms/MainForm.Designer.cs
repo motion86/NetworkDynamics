@@ -149,6 +149,8 @@
             this.label19 = new System.Windows.Forms.Label();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.gbSelectParameters = new System.Windows.Forms.GroupBox();
+            this.rb_dt = new System.Windows.Forms.RadioButton();
+            this.rb_EtaNeg = new System.Windows.Forms.RadioButton();
             this.cbLS = new System.Windows.Forms.CheckBox();
             this.label18 = new System.Windows.Forms.Label();
             this.rb_num_cru = new System.Windows.Forms.RadioButton();
@@ -226,6 +228,9 @@
             this.pbNext = new System.Windows.Forms.PictureBox();
             this.pbPause = new System.Windows.Forms.PictureBox();
             this.pbPlay = new System.Windows.Forms.PictureBox();
+            this.gbModel___ = new System.Windows.Forms.GroupBox();
+            this.cbTwoState = new System.Windows.Forms.CheckBox();
+            this.cbThreeState = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numVertecies)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -295,6 +300,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPause)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
+            this.gbModel___.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -1007,7 +1013,7 @@
             // tbTime
             // 
             this.tbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTime.Location = new System.Drawing.Point(338, 294);
+            this.tbTime.Location = new System.Drawing.Point(345, 310);
             this.tbTime.Name = "tbTime";
             this.tbTime.Size = new System.Drawing.Size(143, 35);
             this.tbTime.TabIndex = 25;
@@ -1440,6 +1446,7 @@
             // 
             // tabParams
             // 
+            this.tabParams.Controls.Add(this.gbModel___);
             this.tabParams.Controls.Add(this.groupBox16);
             this.tabParams.Controls.Add(this.groupBox3);
             this.tabParams.Controls.Add(this.groupBox7);
@@ -1890,6 +1897,8 @@
             // 
             // gbSelectParameters
             // 
+            this.gbSelectParameters.Controls.Add(this.rb_dt);
+            this.gbSelectParameters.Controls.Add(this.rb_EtaNeg);
             this.gbSelectParameters.Controls.Add(this.cbLS);
             this.gbSelectParameters.Controls.Add(this.label18);
             this.gbSelectParameters.Controls.Add(this.rb_num_cru);
@@ -1906,10 +1915,30 @@
             this.gbSelectParameters.TabStop = false;
             this.gbSelectParameters.Text = "Select Parameter";
             // 
+            // rb_dt
+            // 
+            this.rb_dt.AutoSize = true;
+            this.rb_dt.Location = new System.Drawing.Point(14, 142);
+            this.rb_dt.Name = "rb_dt";
+            this.rb_dt.Size = new System.Drawing.Size(34, 17);
+            this.rb_dt.TabIndex = 69;
+            this.rb_dt.Text = "dt";
+            this.rb_dt.UseVisualStyleBackColor = true;
+            // 
+            // rb_EtaNeg
+            // 
+            this.rb_EtaNeg.AutoSize = true;
+            this.rb_EtaNeg.Location = new System.Drawing.Point(14, 119);
+            this.rb_EtaNeg.Name = "rb_EtaNeg";
+            this.rb_EtaNeg.Size = new System.Drawing.Size(34, 17);
+            this.rb_EtaNeg.TabIndex = 68;
+            this.rb_EtaNeg.Text = "η`";
+            this.rb_EtaNeg.UseVisualStyleBackColor = true;
+            // 
             // cbLS
             // 
             this.cbLS.AutoSize = true;
-            this.cbLS.Location = new System.Drawing.Point(62, 65);
+            this.cbLS.Location = new System.Drawing.Point(68, 53);
             this.cbLS.Name = "cbLS";
             this.cbLS.Size = new System.Drawing.Size(53, 17);
             this.cbLS.TabIndex = 67;
@@ -1928,7 +1957,7 @@
             // rb_num_cru
             // 
             this.rb_num_cru.AutoSize = true;
-            this.rb_num_cru.Location = new System.Drawing.Point(14, 190);
+            this.rb_num_cru.Location = new System.Drawing.Point(14, 211);
             this.rb_num_cru.Name = "rb_num_cru";
             this.rb_num_cru.Size = new System.Drawing.Size(79, 17);
             this.rb_num_cru.TabIndex = 54;
@@ -1938,7 +1967,7 @@
             // rb_net_con
             // 
             this.rb_net_con.AutoSize = true;
-            this.rb_net_con.Location = new System.Drawing.Point(14, 167);
+            this.rb_net_con.Location = new System.Drawing.Point(14, 188);
             this.rb_net_con.Name = "rb_net_con";
             this.rb_net_con.Size = new System.Drawing.Size(107, 17);
             this.rb_net_con.TabIndex = 53;
@@ -1948,7 +1977,7 @@
             // rb_e
             // 
             this.rb_e.AutoSize = true;
-            this.rb_e.Location = new System.Drawing.Point(14, 87);
+            this.rb_e.Location = new System.Drawing.Point(14, 96);
             this.rb_e.Name = "rb_e";
             this.rb_e.Size = new System.Drawing.Size(31, 17);
             this.rb_e.TabIndex = 51;
@@ -1958,7 +1987,7 @@
             // rb_beta
             // 
             this.rb_beta.AutoSize = true;
-            this.rb_beta.Location = new System.Drawing.Point(14, 133);
+            this.rb_beta.Location = new System.Drawing.Point(14, 75);
             this.rb_beta.Name = "rb_beta";
             this.rb_beta.Size = new System.Drawing.Size(31, 17);
             this.rb_beta.TabIndex = 50;
@@ -1968,7 +1997,7 @@
             // rb_gamma
             // 
             this.rb_gamma.AutoSize = true;
-            this.rb_gamma.Location = new System.Drawing.Point(14, 110);
+            this.rb_gamma.Location = new System.Drawing.Point(14, 165);
             this.rb_gamma.Name = "rb_gamma";
             this.rb_gamma.Size = new System.Drawing.Size(31, 17);
             this.rb_gamma.TabIndex = 49;
@@ -1978,7 +2007,7 @@
             // rb_a
             // 
             this.rb_a.AutoSize = true;
-            this.rb_a.Location = new System.Drawing.Point(14, 64);
+            this.rb_a.Location = new System.Drawing.Point(14, 52);
             this.rb_a.Name = "rb_a";
             this.rb_a.Size = new System.Drawing.Size(30, 17);
             this.rb_a.TabIndex = 48;
@@ -2732,6 +2761,39 @@
             this.pbPlay.MouseLeave += new System.EventHandler(this.pbPlay_MouseLeave);
             this.pbPlay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbPlay_MouseUp);
             // 
+            // gbModel___
+            // 
+            this.gbModel___.Controls.Add(this.cbThreeState);
+            this.gbModel___.Controls.Add(this.cbTwoState);
+            this.gbModel___.Location = new System.Drawing.Point(380, 240);
+            this.gbModel___.Name = "gbModel___";
+            this.gbModel___.Size = new System.Drawing.Size(108, 64);
+            this.gbModel___.TabIndex = 55;
+            this.gbModel___.TabStop = false;
+            this.gbModel___.Text = "Dynamic Model";
+            // 
+            // cbTwoState
+            // 
+            this.cbTwoState.AutoSize = true;
+            this.cbTwoState.Checked = true;
+            this.cbTwoState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbTwoState.Location = new System.Drawing.Point(15, 19);
+            this.cbTwoState.Name = "cbTwoState";
+            this.cbTwoState.Size = new System.Drawing.Size(75, 17);
+            this.cbTwoState.TabIndex = 53;
+            this.cbTwoState.Text = "Two State";
+            this.cbTwoState.UseVisualStyleBackColor = true;
+            // 
+            // cbThreeState
+            // 
+            this.cbThreeState.AutoSize = true;
+            this.cbThreeState.Location = new System.Drawing.Point(15, 41);
+            this.cbThreeState.Name = "cbThreeState";
+            this.cbThreeState.Size = new System.Drawing.Size(82, 17);
+            this.cbThreeState.TabIndex = 54;
+            this.cbThreeState.Text = "Three State";
+            this.cbThreeState.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2845,6 +2907,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPause)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).EndInit();
+            this.gbModel___.ResumeLayout(false);
+            this.gbModel___.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3032,6 +3096,11 @@
         private System.Windows.Forms.NumericUpDown numEtaNeg;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.TextBox tbSpecialPars;
+        private System.Windows.Forms.RadioButton rb_dt;
+        private System.Windows.Forms.RadioButton rb_EtaNeg;
+        private System.Windows.Forms.GroupBox gbModel___;
+        private System.Windows.Forms.CheckBox cbThreeState;
+        private System.Windows.Forms.CheckBox cbTwoState;
     }
 }
 

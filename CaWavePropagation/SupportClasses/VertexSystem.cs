@@ -8,8 +8,8 @@ namespace NetworkDynamics
 {
     public class VertexSystem
     {
-        public List<double[]> systemState { private set; get; }      // {x, y, state, CaConcent, BackRate} @ time t
-        private List<double[]> systemState_tm1;                      // {x, y, state, CaConcent, BackRate} CRUs @ t-1
+        public List<double[]> systemState { private set; get; }      // {x, y, state, CaConcent, BackRate, Inactive} @ time t
+        private List<double[]> systemState_tm1;                      // {x, y, state, CaConcent, BackRate, Inactive} CRUs @ t-1
 
         public List<double[]> adjMat { private set; get; }           // NxN matrix storing relationships between nodes.
         public double[,] adjMatScaled { private set; get; }          // NxN matrix storing relationships between nodes with adjusted weights.
@@ -112,8 +112,8 @@ namespace NetworkDynamics
             systemState_tm1 = new List<double[]>(sysSize);
             for (int i = 0; i < sysSize; i++)
             {
-                systemState.Add(_assembleStateVector(coords, ic, parameters.Eta, parameters.EtaNeg, i));
-                systemState_tm1.Add(_assembleStateVector(coords, ic, parameters.Eta, parameters.EtaNeg, i));
+                systemState.Add(_assembleStateVector(coords, ic, parameters.Eta, parameters.EtaNeg, 0, i));
+                systemState_tm1.Add(_assembleStateVector(coords, ic, parameters.Eta, parameters.EtaNeg, 0, i));
             }
         }
 
@@ -549,14 +549,39 @@ namespace NetworkDynamics
 
         public void updateSystemState()
         {
-            updateSystemState(parameters);
+            if(parameters.DynamicModelTwoState)
+                updateSystemState(parameters);
+            else
+                updateSystemStateThreeState(parameters);
+        }
+
+        public void updateSystemStateThreeState(SystemParameters inPars)
+        {
+            double tao1 = 0.25; // Temp hardcoded parameter.
+            double tao2 = 0.25; // Temp hardcoded parameter
+
+            for (int i = 0; i < inPars.N; i++)
+            {
+                if (systemState_tm1[i][2] == 1) // check id site is ON
+                {
+                    if (rdn.NextDouble() < systemState[i][4] * inPars.dt)    //probability of transitioning from 1 -> 0
+                        systemState[i][2] = 0;
+                    else if (rdn.NextDouble() < tao1 * inPars.dt) // probability of trans into inactive state.
+                    {
+                        systemState[i][2] = 0; // turn site OFF
+                        systemState[i][5] = 1; // set inactive
+                    }
+                }
+                else if (systemState_tm1[i][5] == 1 && rdn.NextDouble() < tao2 * inPars.dt) // check if site is inactive and run against the probability of activating.
+                    systemState[i][5] = 0;
+                else if (systemState_tm1[i][5] == 0 && rdn.NextDouble() < systemState[i][3] * inPars.dt) // check if active and run probabiliti of turning ON
+                    systemState[i][2] = 1;
+            }
         }
 
         public void updateSystemState(SystemParameters inPars)
             // updateSystemState - updates the state for every unit in the system
         {
-            
-
             for (int i = 0; i < inPars.N; i++)
             {
                 if (systemState_tm1[i][2] == 0)
@@ -567,7 +592,8 @@ namespace NetworkDynamics
                       if (rdn.NextDouble() < systemState[i][3] * inPars.dt) //!!!!! here Beta is dT!!
                             systemState[i][2] = 1;
                 }
-                if (systemState_tm1[i][2] == 1)
+                //if (systemState_tm1[i][2] == 1)
+                else
                 {
                     if (rdn.NextDouble() < systemState[i][4] * inPars.dt)    //probability of transitioning from 1 -> 0
                         systemState[i][2] = 0;
@@ -647,9 +673,9 @@ namespace NetworkDynamics
             return temp;
         }
 
-        private double[] _assembleStateVector(CoordPoint[] coords, List<int> ic, double cZero, double BackRate, int i)
+        private double[] _assembleStateVector(CoordPoint[] coords, List<int> ic, double cZero, double BackRate, double Inactive, int i)
         {
-            return new double[] { coords[i].x, coords[i].y, ic[i], cZero, BackRate };
+            return new double[] { coords[i].x, coords[i].y, ic[i], cZero, BackRate, Inactive };
         }
 
         private static System.Collections.IEnumerable range(int range)
@@ -664,11 +690,13 @@ namespace NetworkDynamics
         public int N, nClustes;
         public CoordPoint bc;
         public string NetType; // powerLaw(BA), uniform(ER), dist(dist)
-        public bool DirectedNetwork, Weights;
+        public bool DirectedNetwork, Weights, DynamicModelTwoState;
         public List<string[]> SpecialPars;
 
         public SystemParameters(double Alpha, double Eta, double Gamma, double Beta, double EtaNeg, double dt, double Connectivity,
-                                int N, double K, int nClustes, string NetType, CoordPoint bc, bool DirectedNetwork, bool Weights, List<string[]> SpecialPars)
+                                int N, double K, int nClustes, string NetType, CoordPoint bc, 
+                                bool DirectedNetwork, bool Weights, List<string[]> SpecialPars,
+                                bool DynamicModelTwoState)
         {
             this.Eta = Eta;
             this.Alpha = Alpha;
@@ -685,6 +713,7 @@ namespace NetworkDynamics
             this.DirectedNetwork = DirectedNetwork;
             this.Weights = Weights;
             this.SpecialPars = DataTools.listCopy(SpecialPars);
+            this.DynamicModelTwoState = DynamicModelTwoState;
             
         }
         public SystemParameters(SystemParameters p)
@@ -704,7 +733,7 @@ namespace NetworkDynamics
             this.DirectedNetwork = p.DirectedNetwork;
             this.Weights = p.Weights;
             this.SpecialPars = DataTools.listCopy(p.SpecialPars);
-
+            this.DynamicModelTwoState = p.DynamicModelTwoState;
         }
 
         public double? GetParameter(string name)

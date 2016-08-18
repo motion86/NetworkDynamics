@@ -84,11 +84,13 @@ namespace NetworkDynamics
 
 
             if (sender == rb_e) myControl = numEta; // myButton = "Eta";
-            else if (sender == rb_beta) myControl = numDt; // myButton = "BETA";
+            else if (sender == rb_beta) myControl = numBeta; // myButton = "BETA";
             else if (sender == rb_gamma) myControl = numGama; // myButton = "GAMMA";
             else if (sender == rb_net_con) myControl = numNet; // myButton = "NETCON";
             else if (sender == rb_num_cru) myControl = numVertecies; // myButton = "NUMCRU";
             else if (sender == rb_a) myControl = numAlpha; // myButton = "Alpha";
+            else if (sender == rb_dt) myControl = numDt;
+            else if (sender == rb_EtaNeg) myControl = numEtaNeg;
             else myControl = numK; //myButton = "K";
 
             tbarParamSet.Value = (int)((myControl.Value - myControl.Minimum) * tbarParamSet.Maximum / (myControl.Maximum - myControl.Minimum));
@@ -170,7 +172,8 @@ namespace NetworkDynamics
                                                 new CoordPoint((double)numX.Value, (double)numY.Value),
                                                 cbDirected.Checked,
                                                 cbRandWeights.Checked,
-                                                specPars);
+                                                specPars,
+                                                cbTwoState.Checked);
         }
 
         public void UnpackParameters(SystemParameters pars)
@@ -298,7 +301,7 @@ namespace NetworkDynamics
         }
 
         private async Task SetUpVizualizationComponents(bool newSys)
-            // SetUpVizualizationComponents - 
+            // SetUpVizualizationComponents - Completes the visualization components setup.
         {
             if (newSys)
             {
