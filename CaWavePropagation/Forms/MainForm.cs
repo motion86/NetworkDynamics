@@ -339,6 +339,7 @@ namespace NetworkDynamics
             tabEigen.Enabled = e;
             tabAdjMat.Enabled = e;
             btnRun.Enabled = e;
+            btnReset.Enabled = e;
         }
 
         private void recordStep(bool record)
@@ -1782,6 +1783,18 @@ namespace NetworkDynamics
         {
             if (system != null)
                 system.parameters.EtaNeg = (double)numEtaNeg.Value;
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            packSystemParameters();
+            if (system != null)
+                system.parameters = parameters;
+
+            foreach (var s in chart2.Series)
+                s.Points.Clear();
+
+            events = 0;
         }
 
         private void exp3bExpNumbers()

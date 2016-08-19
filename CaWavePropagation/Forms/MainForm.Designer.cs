@@ -231,6 +231,7 @@
             this.pbNext = new System.Windows.Forms.PictureBox();
             this.pbPause = new System.Windows.Forms.PictureBox();
             this.pbPlay = new System.Windows.Forms.PictureBox();
+            this.btnReset = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numVertecies)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -922,6 +923,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.btnReset);
             this.groupBox5.Controls.Add(this.numStopCond);
             this.groupBox5.Controls.Add(this.label17);
             this.groupBox5.Controls.Add(this.btnStopRun);
@@ -1019,9 +1021,9 @@
             // tbTime
             // 
             this.tbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTime.Location = new System.Drawing.Point(345, 310);
+            this.tbTime.Location = new System.Drawing.Point(380, 310);
             this.tbTime.Name = "tbTime";
-            this.tbTime.Size = new System.Drawing.Size(143, 35);
+            this.tbTime.Size = new System.Drawing.Size(108, 35);
             this.tbTime.TabIndex = 25;
             this.tbTime.Text = "Time";
             this.tbTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1207,7 +1209,7 @@
             this.gbInfect.Controls.Add(this.cbInfect);
             this.gbInfect.Location = new System.Drawing.Point(122, 197);
             this.gbInfect.Name = "gbInfect";
-            this.gbInfect.Size = new System.Drawing.Size(210, 72);
+            this.gbInfect.Size = new System.Drawing.Size(241, 72);
             this.gbInfect.TabIndex = 44;
             this.gbInfect.TabStop = false;
             this.gbInfect.Text = "Activate Vertex Near Mouse Click";
@@ -1513,7 +1515,7 @@
             this.groupBox16.Controls.Add(this.cbCoupled);
             this.groupBox16.Location = new System.Drawing.Point(8, 275);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(324, 70);
+            this.groupBox16.Size = new System.Drawing.Size(355, 70);
             this.groupBox16.TabIndex = 54;
             this.groupBox16.TabStop = false;
             this.groupBox16.Text = "Additional Options";
@@ -2802,6 +2804,17 @@
             this.pbPlay.MouseLeave += new System.EventHandler(this.pbPlay_MouseLeave);
             this.pbPlay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbPlay_MouseUp);
             // 
+            // btnReset
+            // 
+            this.btnReset.Enabled = false;
+            this.btnReset.Location = new System.Drawing.Point(237, 23);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(80, 46);
+            this.btnReset.TabIndex = 30;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3109,6 +3122,7 @@
         private System.Windows.Forms.GroupBox gbModel___;
         private System.Windows.Forms.CheckBox cbThreeState;
         private System.Windows.Forms.CheckBox cbTwoState;
+        private System.Windows.Forms.Button btnReset;
     }
 }
 
