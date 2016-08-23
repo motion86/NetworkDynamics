@@ -108,6 +108,12 @@
     <Compile Include="ALGLIB\solvers.cs" />
     <Compile Include="ALGLIB\specialfunctions.cs" />
     <Compile Include="ALGLIB\statistics.cs" />
+    <Compile Include="Forms\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ChartLabels.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +125,12 @@
     </Compile>
     <Compile Include="Forms\GraphixPlotVertical.Designer.cs">
       <DependentUpon>GraphixPlotVertical.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Help.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Help.Designer.cs">
+      <DependentUpon>Help.cs</DependentUpon>
     </Compile>
     <Compile Include="SupportClasses\Experiment.cs" />
     <Compile Include="Forms\GraphixPlots.cs">
@@ -186,6 +198,9 @@
     <Compile Include="SupportClasses\Vertex.cs" />
     <Compile Include="SupportClasses\VertexData.cs" />
     <Compile Include="SupportClasses\VertexSystem.cs" />
+    <EmbeddedResource Include="Forms\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChartLabels.resx">
       <DependentUpon>ChartLabels.cs</DependentUpon>
     </EmbeddedResource>

@@ -81,6 +81,7 @@
             this.numDtSteps = new System.Windows.Forms.NumericUpDown();
             this.btnRun = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.btnReset = new System.Windows.Forms.Button();
             this.numStopCond = new System.Windows.Forms.NumericUpDown();
             this.label17 = new System.Windows.Forms.Label();
             this.btnStopRun = new System.Windows.Forms.Button();
@@ -231,7 +232,10 @@
             this.pbNext = new System.Windows.Forms.PictureBox();
             this.pbPause = new System.Windows.Forms.PictureBox();
             this.pbPlay = new System.Windows.Forms.PictureBox();
-            this.btnReset = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuHelpHelp = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numVertecies)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -302,6 +306,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPause)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -333,7 +338,7 @@
             chartArea1.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.Location = new System.Drawing.Point(517, 8);
+            this.chart1.Location = new System.Drawing.Point(517, 27);
             this.chart1.Name = "chart1";
             series1.BorderColor = System.Drawing.Color.White;
             series1.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
@@ -932,12 +937,23 @@
             this.groupBox5.Controls.Add(this.btnRun);
             this.groupBox5.Controls.Add(this.label9);
             this.groupBox5.Controls.Add(this.numDtSteps);
-            this.groupBox5.Location = new System.Drawing.Point(12, 395);
+            this.groupBox5.Location = new System.Drawing.Point(12, 414);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(499, 83);
             this.groupBox5.TabIndex = 24;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Simulation Controls";
+            // 
+            // btnReset
+            // 
+            this.btnReset.Enabled = false;
+            this.btnReset.Location = new System.Drawing.Point(237, 23);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(80, 46);
+            this.btnReset.TabIndex = 30;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // numStopCond
             // 
@@ -1037,7 +1053,7 @@
             chartArea2.AxisY2.LineWidth = 0;
             chartArea2.Name = "ChartArea1";
             this.chart2.ChartAreas.Add(chartArea2);
-            this.chart2.Location = new System.Drawing.Point(16, 486);
+            this.chart2.Location = new System.Drawing.Point(16, 505);
             this.chart2.Name = "chart2";
             series6.BorderWidth = 2;
             series6.ChartArea = "ChartArea1";
@@ -1136,7 +1152,7 @@
             // 
             // trPlay
             // 
-            this.trPlay.Location = new System.Drawing.Point(534, 564);
+            this.trPlay.Location = new System.Drawing.Point(534, 583);
             this.trPlay.Name = "trPlay";
             this.trPlay.Size = new System.Drawing.Size(519, 45);
             this.trPlay.TabIndex = 34;
@@ -1148,7 +1164,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(529, 611);
+            this.label13.Location = new System.Drawing.Point(529, 630);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(42, 16);
             this.label13.TabIndex = 36;
@@ -1158,7 +1174,7 @@
             // 
             this.lbPlayTime.AutoSize = true;
             this.lbPlayTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPlayTime.Location = new System.Drawing.Point(577, 611);
+            this.lbPlayTime.Location = new System.Drawing.Point(577, 630);
             this.lbPlayTime.Name = "lbPlayTime";
             this.lbPlayTime.Size = new System.Drawing.Size(36, 16);
             this.lbPlayTime.TabIndex = 37;
@@ -1167,7 +1183,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(966, 609);
+            this.label14.Location = new System.Drawing.Point(966, 628);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(24, 13);
             this.label14.TabIndex = 39;
@@ -1181,7 +1197,7 @@
             0,
             0,
             65536});
-            this.numFps.Location = new System.Drawing.Point(993, 607);
+            this.numFps.Location = new System.Drawing.Point(993, 626);
             this.numFps.Maximum = new decimal(new int[] {
             50,
             0,
@@ -1445,7 +1461,7 @@
             this.tabControl1.Controls.Add(this.tabExploreResults);
             this.tabControl1.Controls.Add(this.tabAdjMat);
             this.tabControl1.Controls.Add(this.tabEigen);
-            this.tabControl1.Location = new System.Drawing.Point(9, 12);
+            this.tabControl1.Location = new System.Drawing.Point(9, 31);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(502, 377);
@@ -2629,7 +2645,7 @@
             this.groupBox8.Controls.Add(this.label6);
             this.groupBox8.Controls.Add(this.btnTimePlot);
             this.groupBox8.Controls.Add(this.cbTimePlot);
-            this.groupBox8.Location = new System.Drawing.Point(533, 642);
+            this.groupBox8.Location = new System.Drawing.Point(533, 661);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(520, 76);
             this.groupBox8.TabIndex = 47;
@@ -2717,7 +2733,7 @@
             this.tsStatusBar,
             this.tsInfoLabel,
             this.tsMatGenerator});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 739);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 759);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.statusStrip1.Size = new System.Drawing.Size(1084, 22);
@@ -2751,7 +2767,7 @@
             // pbPrev
             // 
             this.pbPrev.Image = ((System.Drawing.Image)(resources.GetObject("pbPrev.Image")));
-            this.pbPrev.Location = new System.Drawing.Point(689, 588);
+            this.pbPrev.Location = new System.Drawing.Point(689, 607);
             this.pbPrev.Name = "pbPrev";
             this.pbPrev.Size = new System.Drawing.Size(52, 48);
             this.pbPrev.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -2765,7 +2781,7 @@
             // pbNext
             // 
             this.pbNext.Image = ((System.Drawing.Image)(resources.GetObject("pbNext.Image")));
-            this.pbNext.Location = new System.Drawing.Point(851, 588);
+            this.pbNext.Location = new System.Drawing.Point(851, 607);
             this.pbNext.Name = "pbNext";
             this.pbNext.Size = new System.Drawing.Size(52, 48);
             this.pbNext.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -2779,7 +2795,7 @@
             // pbPause
             // 
             this.pbPause.Image = ((System.Drawing.Image)(resources.GetObject("pbPause.Image")));
-            this.pbPause.Location = new System.Drawing.Point(797, 588);
+            this.pbPause.Location = new System.Drawing.Point(797, 607);
             this.pbPause.Name = "pbPause";
             this.pbPause.Size = new System.Drawing.Size(52, 48);
             this.pbPause.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -2793,7 +2809,7 @@
             // pbPlay
             // 
             this.pbPlay.Image = ((System.Drawing.Image)(resources.GetObject("pbPlay.Image")));
-            this.pbPlay.Location = new System.Drawing.Point(743, 588);
+            this.pbPlay.Location = new System.Drawing.Point(743, 607);
             this.pbPlay.Name = "pbPlay";
             this.pbPlay.Size = new System.Drawing.Size(52, 48);
             this.pbPlay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -2804,23 +2820,45 @@
             this.pbPlay.MouseLeave += new System.EventHandler(this.pbPlay_MouseLeave);
             this.pbPlay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbPlay_MouseUp);
             // 
-            // btnReset
+            // menuStrip1
             // 
-            this.btnReset.Enabled = false;
-            this.btnReset.Location = new System.Drawing.Point(237, 23);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(80, 46);
-            this.btnReset.TabIndex = 30;
-            this.btnReset.Text = "Reset";
-            this.btnReset.UseVisualStyleBackColor = true;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.helpToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1084, 24);
+            this.menuStrip1.TabIndex = 49;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuHelpAbout,
+            this.menuHelpHelp});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // menuHelpAbout
+            // 
+            this.menuHelpAbout.Name = "menuHelpAbout";
+            this.menuHelpAbout.Size = new System.Drawing.Size(152, 22);
+            this.menuHelpAbout.Text = "About";
+            this.menuHelpAbout.MouseDown += new System.Windows.Forms.MouseEventHandler(this.menuHelpAbout_MouseDown);
+            // 
+            // menuHelpHelp
+            // 
+            this.menuHelpHelp.Name = "menuHelpHelp";
+            this.menuHelpHelp.Size = new System.Drawing.Size(152, 22);
+            this.menuHelpHelp.Text = "Help";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1084, 761);
+            this.ClientSize = new System.Drawing.Size(1084, 781);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.pbPrev);
@@ -2835,10 +2873,11 @@
             this.Controls.Add(this.trPlay);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.chart1);
-            this.MaximumSize = new System.Drawing.Size(1100, 800);
-            this.MinimumSize = new System.Drawing.Size(1100, 800);
+            this.MainMenuStrip = this.menuStrip1;
+            this.MaximumSize = new System.Drawing.Size(1100, 820);
+            this.MinimumSize = new System.Drawing.Size(1100, 820);
             this.Name = "MainForm";
-            this.Text = "Network Dynamics - J.Myers";
+            this.Text = "Network Dynamics";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numVertecies)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -2930,6 +2969,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbNext)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPause)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3123,6 +3164,10 @@
         private System.Windows.Forms.CheckBox cbThreeState;
         private System.Windows.Forms.CheckBox cbTwoState;
         private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuHelpAbout;
+        private System.Windows.Forms.ToolStripMenuItem menuHelpHelp;
     }
 }
 

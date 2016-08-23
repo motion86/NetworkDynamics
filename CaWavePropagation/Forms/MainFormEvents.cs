@@ -392,6 +392,64 @@ namespace NetworkDynamics
 
 
         /// ////////////////////////////////////////////////////////////////////////////////////
+        /// UPDATERS
+        /// 
+        private void numGama_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.Gamma = (double)numGama.Value;
+        }
+
+        private void numDt_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.dt = (double)numDt.Value;
+        }
+
+        private void numAlpha_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.Alpha = (double)numAlpha.Value;
+        }
+
+        private void numBeta_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.Beta = (double)numBeta.Value;
+        }
+
+        private void numEta_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.Eta = (double)numEta.Value;
+        }
+
+        private void numEtaNeg_ValueChanged(object sender, EventArgs e)
+        {
+            if (system != null)
+                system.parameters.EtaNeg = (double)numEtaNeg.Value;
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            packSystemParameters();
+            if (system != null)
+                system.parameters = parameters;
+
+            foreach (var s in chart2.Series)
+                s.Points.Clear();
+
+            events = 0;
+        }
+
+        /// ////////////////////////////////////////////////////////////////////////////////////
+        /// SPAWN INFO FORMS
+        /// 
+        private void menuHelpAbout_MouseDown(object sender, MouseEventArgs e)
+        {
+            Forms.About ab = new Forms.About();
+            ab.Show();
+        }
 
     }
 }
