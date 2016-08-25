@@ -1674,7 +1674,8 @@
             "PhaseTransitions 1",
             "PhaseTransitions 2",
             "Ph.Transitions 2 MxIC",
-            "ActiveNode_pDens"});
+            "ActiveNode_pDens",
+            "(n/N) vs. p"});
             this.comboExpType.Location = new System.Drawing.Point(40, 260);
             this.comboExpType.Name = "comboExpType";
             this.comboExpType.Size = new System.Drawing.Size(121, 21);

@@ -221,7 +221,7 @@ namespace NetworkDynamics
 
         }
 
-        private void genAdjMat()
+        protected void genAdjMat()
         // generates the network adjMatrix.
         {
             adjMat = new List<double[]>();

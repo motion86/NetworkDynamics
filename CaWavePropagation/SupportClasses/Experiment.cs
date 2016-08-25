@@ -16,10 +16,11 @@ namespace NetworkDynamics
         public ExperimentParameters ExpPars;
 
         public static int experimentIndex;
-        private string[] experimentCode = { "X1", "X2", "X3", "X4", "X5", "X6" }; // X1 - ; X2 - ; 
+        private string[] experimentCode = { "X1", "X2", "X3", "X4", "X5", "X6", "X7" }; // X1 - ; X2 - ; 
                                                                             // X3 - Examines the power of the top 10 sites vs the remaining.
                                                                             // X4 - Produces a density of active sites over a long run for a range of the given parameter.
-                                                                            // X5 - Same as X4 but mixes 2 initial conditions (0 plus the one provided by the user) to provide a filler picture. 
+                                                                            // X5 - Same as X4 but mixes 2 initial conditions (0 plus the one provided by the user) to provide a filler picture.
+                                                                            // X7 - Calculates n/N for systems of different connectivity. n - number of components of the leading eigen vector's components exceeding a threshold of 10% above AVG component size. 
 
         private static List<Experiment> jobs;
         //private static double varMin, varStep;
@@ -213,10 +214,12 @@ namespace NetworkDynamics
                 case 5:
                     success = runSim5();
                     break;
+                case 6:
+                    success = runSim6();
+                    break;
             }
             return success;
         }
-
 
         private bool runSim1(double[] pars)
         // Simulation routine for experiment 2.
@@ -406,6 +409,52 @@ namespace NetworkDynamics
             return Results.Success;
         }
 
+        private bool runSim6()
+            // calculate n/N where n - the number of leading eigen vector components exceeding 10% of the average component size.
+        {
+            bool symRunStop = true;
+            int runs = 0;
+            parameters.Connectivity = ExpPars.K;
+            parameters.K = ExpPars.K;
+
+            genAdjMat(); // gen new network (this updates only the adjMat)
+
+            // get eigen vectors.
+            Matrix M = new Matrix(adjMat);
+            M.CalcEigenGeneral();
+
+            // find largest eigen vector.
+            int maxLambdaIndex = 0;
+            for (int i = 0; i < M.LambdaR.Length; i++)
+                if (M.LambdaR[i] > M.LambdaR[maxLambdaIndex])
+                    maxLambdaIndex = i;
+            // get the avg componet size.
+            double componentAvg = 0;
+
+            for (int i = 0; i < M.LambdaR.Length; i++)
+                componentAvg += Math.Abs(M.EigenVectors[i, maxLambdaIndex]);
+
+            componentAvg /= M.LambdaR.Length;
+
+            // get the number of components exceeding the threshold.
+            int numberAboveThreshold = 0;
+
+            if (componentAvg > 0)
+                componentAvg *= 0.1;
+            else
+                componentAvg *= 0.1;
+
+            for (int i = 0; i < M.LambdaR.Length; i++)
+                if (Math.Abs(M.EigenVectors[i, maxLambdaIndex]) > componentAvg)
+                    numberAboveThreshold++;
+
+            // record result.
+            Results.MeanActivity = numberAboveThreshold; // use this container to store the output.
+            Results.Success = true;
+            return true;
+            //throw new NotImplementedException();
+        }
+
         private double runAvg(double[] samples)
         {
             double avg = 0;
@@ -448,7 +497,7 @@ namespace NetworkDynamics
 
     public class ExperimentCallbacks
     {
-        public static Action<Experiment, FileIO>[] CallBacks = {null, null, MeanActivityToFile, NumActiveSitesToFile, NumActiveSitesToFile, DensityVectorToFile};
+        public static Action<Experiment, FileIO>[] CallBacks = {null, null, MeanActivityToFile, NumActiveSitesToFile, NumActiveSitesToFile, DensityVectorToFile, MeanActivityToFile};
 
         private static void MeanActivityToFile(Experiment exp, FileIO file)
         // callbackExp3 - records the results of the finished jobs to file.
@@ -509,7 +558,7 @@ namespace NetworkDynamics
         public ExperimentParameters(SystemParameters p, double initialCondition, double threshold, double maxItr, 
                              string varName, double varMin, double varStep) : base(p)
         {
-            pars = new double[] { p.Eta, p.Gamma, p.dt, p.Alpha, threshold, maxItr, p.EtaNeg, p.Beta };
+            pars = new double[] { p.Eta, p.Gamma, p.dt, p.Alpha, threshold, maxItr, p.EtaNeg, p.Beta, p.K };
 
             InitialCodition = initialCondition;
             StopCodition = threshold;
@@ -544,6 +593,8 @@ namespace NetworkDynamics
                     return 7;
                 case "EtaNeg":
                     return 6;
+                case "K":
+                    return 8;
                 default:
                     return null;
             }
@@ -551,7 +602,7 @@ namespace NetworkDynamics
         public void SyncMemberVars()
             //Syncs the pars array with the member vars;
         {
-            Alpha = pars[3]; Gamma = pars[1]; dt = pars[2]; Eta = pars[0]; Beta = pars[7]; EtaNeg = pars[6]; 
+            Alpha = pars[3]; Gamma = pars[1]; dt = pars[2]; Eta = pars[0]; Beta = pars[7]; EtaNeg = pars[6]; K = pars[8];
         }
         public double IncrementVar()
             // IncrementVar - increments the variable paramenter.

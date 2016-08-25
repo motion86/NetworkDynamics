@@ -88,7 +88,7 @@ namespace NetworkDynamics
             if (M2d == null) // transffer M into M2d.
                 M2M2d();
 
-            bool done = alglib.rmatrixevd(M2d, M.Count, 2, out LambdaR, out LambdaI, out EigenVectors, out na);
+            bool done = alglib.rmatrixevd(M2d, M.Count, 1, out LambdaR, out LambdaI, out na, out EigenVectors);
 
             this.EigenVectors = EigenVectors;
             this.LambdaR = LambdaR;

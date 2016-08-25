@@ -42,7 +42,7 @@ namespace NetworkDynamics
         private List<string> archivedItems; // stores the file paths to experiment files loaded in ExploreResults tab.
 
         private string[] netTypes = { "DF", "ER", "BA", "CH" };                 // Diffusive, Erdős–Rényi, Barabási–Albert
-        private string[] experimentCode = { "X1", "X2", "X3", "X4", "X5", "X6" }; // X1 - ; X2 - ; 
+        private string[] experimentCode = { "X1", "X2", "X3", "X4", "X5", "X6", "X7" }; // X1 - ; X2 - ; 
                                                                                   // X3 - Examines the power of the top 10 sites vs the remaining.
                                                                                   // X4 - Produces a density of active sites over a long run for a range of the given parameter.
                                                                                   // X5 - Same as X4 but mixes 2 initial conditions (0 plus the one provided by the user) to provide a filler picture. 
@@ -1567,6 +1567,35 @@ namespace NetworkDynamics
                 case 5:             //Plot Leading eigen vector against the Node's firing probability.
                     exp6ExpNumbers();
                     break;
+                case 6:             //Plot Leading eigen vector against the Node's firing probability.
+                    ExpNumbers_OneFilePerPoint();
+                    break;
+            }
+        }
+
+        private void ExpNumbers_OneFilePerPoint()
+        {
+            List<double> xdata = new List<double>(), ydata = new List<double>();
+            List<string> paths = GetPlotFilePath();
+            if (paths != null)
+            {
+                foreach (string p in paths)
+                {
+                    var tokens = FileIO.ExtractTokens(FileIO.getFileNameFromPath(p), '_', '#');
+                    double N = Double.Parse(tokens[1][1]);
+                    double K = Double.Parse(tokens[2][1]);
+                    xdata.Add(K);
+
+                    List<double> ydata_; // temp vals.
+                    GetPlotValuesFromDataFile(p, out ydata_);
+                    ydata.Add(ydata_.Average()/N); // get the mean of the data.
+                }
+                double y;
+                exp5ExpNumbers(out y, paths[0], xdata, ydata);
+
+                pa.C1.Legends[0].Enabled = false; // hide the legend
+                pa.C1.Series[0].ChartType = SeriesChartType.Point;
+                pa.C1.Series[0].MarkerStyle = MarkerStyle.Circle;
             }
         }
 
@@ -1676,6 +1705,8 @@ namespace NetworkDynamics
             return exp5ExpNumbers(out maxY, path, null, null);
         }
 
+        
+
         private static void GetPlotValuesFromDataFile(string path, out List<double> ydata)
         // y-values read from file
         {
@@ -1712,7 +1743,7 @@ namespace NetworkDynamics
         }
 
         private List<string> GetPlotFilePath()
-            // return the selected file path. Performs a check for label sattings.
+            // return the selected file path. Performs a check for label settings.
         {
             var filePaths = new List<string>();
             if (ChartLabels.labels == null)

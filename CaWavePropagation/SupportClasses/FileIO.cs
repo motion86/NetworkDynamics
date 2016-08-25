@@ -267,6 +267,48 @@ namespace NetworkDynamics
 
         }
 
+        private static void GetDataFromFile(string path, out List<double> ydata)
+        // Read whole file and return values (single column data)
+        {
+            ydata = new List<double>();
+            using (var file = new FileIO(path, false))
+            {
+                bool eof = false;
+                while (true)
+                {
+                    double y = file.ReadLineDouble(out eof);
+                    if (eof) break;
+                    ydata.Add(y);
+                }
+            }
+        }
+
+        private static void GetDataFromFile(string path, out List<double> xdata, out List<double> ydata)
+        // y-values read from file, x-values 0-N
+        {
+            xdata = new List<double>();
+            ydata = new List<double>();
+            using (var file = new FileIO(path, false))
+            {
+                double i = 0;
+                bool eof = false;
+                while (true)
+                {
+                    double y = file.ReadLineDouble(out eof);
+                    if (eof) break;
+                    ydata.Add(y);
+                    xdata.Add(i++);
+                }
+            }
+        }
+
+        public static double GetDataFileAvgValue(string path)
+        // reads data from a file with a single column of data entries and returns the mean.
+        {
+            var data = new List<double>();
+
+            return data.Sum() / data.Count();
+        }
 
         private static System.Collections.IEnumerable range(int range)
         {
