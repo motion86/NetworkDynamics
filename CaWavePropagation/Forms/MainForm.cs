@@ -134,7 +134,7 @@ namespace NetworkDynamics
             {
                 numK.Value = numNet.Value;
                 double n = (double)numVertecies.Value;
-                if ((Math.Log(n) / n) < ((double)numNet.Value / 100d)) // determine if ER network is connected or not
+                if ((1 / n) < ((double)numNet.Value / 100d)) // determine if ER network is connected or not
                     tbTime.Text = "Connected!";
                 else
                     tbTime.Text = "Disconnect!";
@@ -145,9 +145,19 @@ namespace NetworkDynamics
 
         }
 
+        string formatCount;
         private void btnRun_Click(object sender, EventArgs e)
         //Performs the main simulation sewuence
         {
+            if (numDtStepSize.Value > 0.99m)
+                formatCount = "F0";
+            else if (numDtStepSize.Value > 0.099m)
+                formatCount = "F1";
+            else if (numDtStepSize.Value > 0.0099m)
+                formatCount = "F2";
+            else
+                formatCount = "F3";
+
             runSym();
         }
 
@@ -557,17 +567,20 @@ namespace NetworkDynamics
 
         private async void doEigen()
         {
-            //adjMatEigen.calcEigen();
-            //tbLambda.Text = adjMatEigen.Lambda.ToString("F4");
-            /*rtbVectComp.Text = "";
+            /*
+            adjMatEigen.calcEigen();
+            tbLambda.Text = adjMatEigen.Lambda.ToString("F4");
+            rtbEigVector.Text = "";
             foreach (int i in iterate(adjMatEigen.rows))
-                rtbVectComp.Text += adjMatEigen.EigenV[i][0].ToString("F4") + "\n";
-                */
+                rtbEigVector.Text += adjMatEigen.EigenV[i][0].ToString("F4") + "\n";
+            */  
             await Task.Run(() => adjMatEigen.CalcEigenGeneral());
 
             rtbEigenVals.Text = "Real\tImg\n";
             for (int i = 0; i < adjMatEigen.LambdaR.Length; i++)
-                rtbEigenVals.Text += $"{adjMatEigen.LambdaR[i]:F3}\t{adjMatEigen.LambdaI[i]:F3}i \n";   
+               rtbEigenVals.Text += $"{adjMatEigen.LambdaR[i]:F3}\t{adjMatEigen.LambdaI[i]:F3}i \n";
+
+            numEigVector_ValueChanged(null, null);
         }
 
 
@@ -968,8 +981,8 @@ namespace NetworkDynamics
             if (masterNode && highImpactNode) chart2.Series["S2"].Points[events - 1].Color = Color.Purple;
             else if (masterNode) chart2.Series["S2"].Points[events - 1].Color = Color.Red;
             else if (highImpactNode) chart2.Series["S2"].Points[events - 1].Color = Color.Green;
-
-            tbTime.Text = (currentTime * (double)numDtStepSize.Value).ToString();
+            
+            tbTime.Text = (currentTime * (double)numDtStepSize.Value).ToString(formatCount);
 
             tbTime.Update();
 
@@ -1780,7 +1793,7 @@ namespace NetworkDynamics
                 rtbEigVector.Text += $" {adjMatEigen.EigenVectors[i, vectNum]:F3}\n";
         }
 
-        
+
 
         private void exp3bExpNumbers()
         {

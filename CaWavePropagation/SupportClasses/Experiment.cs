@@ -217,9 +217,12 @@ namespace NetworkDynamics
                 case 6:
                     success = runSim6();
                     break;
+
             }
             return success;
         }
+
+        
 
         private bool runSim1(double[] pars)
         // Simulation routine for experiment 2.
@@ -416,38 +419,58 @@ namespace NetworkDynamics
             int runs = 0;
             parameters.Connectivity = ExpPars.K;
             parameters.K = ExpPars.K;
-
-            genAdjMat(); // gen new network (this updates only the adjMat)
-
-            // get eigen vectors.
-            Matrix M = new Matrix(adjMat);
-            M.CalcEigenGeneral();
-
-            // find largest eigen vector.
+            adjMat = null;
+            Matrix M;
             int maxLambdaIndex = 0;
-            for (int i = 0; i < M.LambdaR.Length; i++)
-                if (M.LambdaR[i] > M.LambdaR[maxLambdaIndex])
-                    maxLambdaIndex = i;
+            if (parameters.NetType == "BA")
+            {
+                adjMat = ResearchNetwork.barbasiAlbert(parameters.N, (int)parameters.K);
+                M = new Matrix(adjMat);
+                M.calcEigen();
+            }
+            else
+            {
+                genAdjMat(); // gen new network (this updates only the adjMat)
+                M = new Matrix(adjMat);
+                // get eigen vectors.
+                M.CalcEigenGeneral();
+                // find largest eigen vector.
+                for (int i = 0; i < M.LambdaR.Length; i++)
+                    if (M.LambdaR[i] > M.LambdaR[maxLambdaIndex])
+                        maxLambdaIndex = i;
+            }
+            
+
+
+            
             // get the avg componet size.
-            double componentAvg = 0;
+            double norm = 0;
+            double max = 0;
+            List<double> v = new List<double>(parameters.N);
+            for (int i = 0; i < parameters.N; i++)
+            {
+                double e;
+                if (parameters.NetType == "BA")
+                    e = Math.Abs(M.EigenV[i][0]);
+                else
+                    e = Math.Abs(M.EigenVectors[i, maxLambdaIndex]);
 
-            for (int i = 0; i < M.LambdaR.Length; i++)
-                componentAvg += Math.Abs(M.EigenVectors[i, maxLambdaIndex]);
+                norm += Math.Pow(e, 2);
+                if (e > max)
+                    max = e;
+                v.Add(e);
+            }
 
-            componentAvg /= M.LambdaR.Length;
+            norm = Math.Sqrt(norm);
 
             // get the number of components exceeding the threshold.
             int numberAboveThreshold = 0;
-
-            if (componentAvg > 0)
-                componentAvg *= 0.1;
-            else
-                componentAvg *= 0.1;
-
-            for (int i = 0; i < M.LambdaR.Length; i++)
-                if (Math.Abs(M.EigenVectors[i, maxLambdaIndex]) > componentAvg)
+            double threshold = ExpPars.StopCodition * max / 100;
+            for (int i = 0; i < parameters.N; i++)
+                if (v[i] > threshold)
                     numberAboveThreshold++;
 
+            M = null;
             // record result.
             Results.MeanActivity = numberAboveThreshold; // use this container to store the output.
             Results.Success = true;

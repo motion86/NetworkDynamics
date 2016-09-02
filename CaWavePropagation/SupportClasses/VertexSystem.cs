@@ -8,10 +8,10 @@ namespace NetworkDynamics
 {
     public class VertexSystem
     {
-        public List<double[]> systemState { private set; get; }      // {x, y, state, CaConcent, BackRate, Inactive} @ time t
+        public List<double[]> systemState { private set; get; }      // {x, y, state, pON, pOFF, Inactive} @ time t
         private List<double[]> systemState_tm1;                      // {x, y, state, CaConcent, BackRate, Inactive} CRUs @ t-1
 
-        public List<double[]> adjMat { private set; get; }           // NxN matrix storing relationships between nodes.
+        public List<double[]> adjMat { protected set; get; }           // NxN matrix storing relationships between nodes.
         public double[,] adjMatScaled { private set; get; }          // NxN matrix storing relationships between nodes with adjusted weights.
 
         public List<List<int>> adjList { private set; get; }         // contains the indecies of the non zero entries of the adjMatrix.
@@ -753,10 +753,10 @@ namespace NetworkDynamics
             }
         }
 
-    }
+    } 
 
     public struct CoordPoint
-    {
+    { 
         public double x, y;
         public CoordPoint(double x, double y)
         {

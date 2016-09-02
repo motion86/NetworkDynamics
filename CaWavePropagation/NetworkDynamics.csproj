@@ -204,6 +204,9 @@
     <EmbeddedResource Include="Forms\ChartLabels.resx">
       <DependentUpon>ChartLabels.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Help.resx">
+      <DependentUpon>Help.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -39,7 +39,8 @@ namespace NetworkDynamics
             size = inSize;
             //connectivity = inConn;
             nLinks = inNlinks;
-            rdn = new Random();
+            if(rdn == null)
+                rdn = new Random();
 
             //createMatrix(inSize);
             spawnVertices(inSize);
@@ -109,7 +110,7 @@ namespace NetworkDynamics
             }
         }
 
-        private List<double[]> barbasiAlbert(int size, int links)
+        public static List<double[]> barbasiAlbert(int size, int links)
             // barbasiAlbert - generates a Barbasi Albert network.
         {
             List<double[]> adjMat = createMatrix(size);
@@ -218,7 +219,7 @@ namespace NetworkDynamics
 
         }
 
-        private int getSumOfDeg(List<double[]> adjMat, int upto)
+        private static int getSumOfDeg(List<double[]> adjMat, int upto)
             // getSumDeg - O(N^2) - returns the sum of the degrees of all nodes in the system.
             // @return int - the sum of the degrees on all nodes.
         {
@@ -229,7 +230,7 @@ namespace NetworkDynamics
             return sum;
         }
 
-        private void getProbabilities(ref double[] probabilities, List<double[]> adjMat, int upto)
+        private static void getProbabilities(ref double[] probabilities, List<double[]> adjMat, int upto)
             // getProbabilities - updates the connection probabilities.
             // @param double[] - reference to the connection probability array.
             // @param int - current net size.
@@ -247,14 +248,13 @@ namespace NetworkDynamics
             foreach (int i in range(inSize)) vNet.Add(new Vertex());
         }
 
-        private List<double[]> createMatrix(int inSize)
+        private static List<double[]> createMatrix(int inSize)
             // createMatrix - generate an empty adj matrix.
         {
             var adjMat = new List<double[]>(inSize);
             for (int i = 1; i < inSize + 1; i++)
-            {
                 adjMat.Add(new double[inSize]);
-            }
+
             return adjMat;
         }
 

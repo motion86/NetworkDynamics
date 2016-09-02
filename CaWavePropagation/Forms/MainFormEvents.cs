@@ -404,6 +404,8 @@ namespace NetworkDynamics
         {
             if (system != null)
                 system.parameters.dt = (double)numDt.Value;
+            numDtStepSize.Value = numDt.Value;
+
         }
 
         private void numAlpha_ValueChanged(object sender, EventArgs e)
@@ -440,6 +442,16 @@ namespace NetworkDynamics
                 s.Points.Clear();
 
             events = 0;
+        }
+
+        private void numNet_ValueChanged(object sender, EventArgs e)
+        {
+            numK.Value = numNet.Value;
+        }
+
+        private void numK_ValueChanged(object sender, EventArgs e)
+        {
+            numNet.Value = numK.Value;
         }
 
         /// ////////////////////////////////////////////////////////////////////////////////////

@@ -14,11 +14,11 @@ namespace NetworkDynamics
             if (listToCopy == null) return null;
 
             List<double[]> copy = new List<double[]>(listToCopy.Count);
-            int arrSize = listToCopy[0].Length;
+            //int arrSize = listToCopy[0].Length;
             foreach (double[] arr in listToCopy)
             {
-                double[] arr_copy = new double[arrSize];
-                for (int i = 0; i < arrSize; i++)
+                double[] arr_copy = new double[arr.Length];
+                for (int i = 0; i < arr.Length; i++)
                     arr_copy[i] = arr[i];
                 copy.Add(arr_copy);
             }
